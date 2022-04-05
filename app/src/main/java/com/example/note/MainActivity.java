@@ -1,21 +1,27 @@
 package com.example.note;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String testAreaKey = "com.example.note.testAreaKey";
-    private SharedPreferences pref;
-    private EditText textArea;
+    private RecyclerView recyclerView;
+    private FloatingActionButton addButton;
+    private DatabaseHelper databaseHelper;
+    private ArrayList<String> noteTitles;
+    private ArrayList<String> noteContents;
+    private CustomAdapter customAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,37 +31,38 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        pref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
-        textArea = this.findViewById(R.id.textArea);
+        recyclerView = findViewById(R.id.recyclerView);
 
-        String text = pref.getString(testAreaKey, "");
-        textArea.setText(text);
+        addButton = findViewById(R.id.add_button);
+        addButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, NoteActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        databaseHelper = new DatabaseHelper(this);
+
+        noteTitles = new ArrayList<>();
+        noteContents = new ArrayList<>();
+
+        storeDataInArrays();
+
+        customAdapter = new CustomAdapter(MainActivity.this, noteTitles, noteContents);
+        recyclerView.setAdapter(customAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
+    private void storeDataInArrays() {
+        Cursor cursor = databaseHelper.readAllNotes();
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.saveNote) {
-            SharedPreferences.Editor editor = pref.edit();
-            String text = textArea.getText().toString();
-
-            editor.putString(testAreaKey, text);
-            editor.apply();
-
-            toastMsg("notes have been saved");
-
-            return true;
+        if (cursor.getCount() == 0)
+            Toast.makeText(this, "There is no notes", Toast.LENGTH_SHORT).show();
+        else {
+            while (cursor.moveToNext()) {
+                noteTitles.add(cursor.getString(1));
+                noteContents.add(cursor.getString(2));
+            }
         }
-        return super.onOptionsItemSelected(item);
     }
 
-    public void toastMsg(String msg) {
-        Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
-        toast.show();
-    }
 }

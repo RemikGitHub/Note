@@ -3,4 +3,6 @@
     <string name="save">Save</string>
     <string name="textHint">Write text</string>
     <string name="title">Note</string>
+    <string name="add_note_floating_button">Add note</string>
+    <string name="note_title">Title</string>
 </resources>
