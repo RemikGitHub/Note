@@ -11,6 +11,12 @@ import androidx.appcompat.widget.Toolbar;
 
 public class NoteActivity extends AppCompatActivity {
 
+    private String id;
+    private String title;
+    private String content;
+
+    private boolean isNewNote;
+
     private EditText noteTitleEditText;
     private EditText noteContentEditText;
 
@@ -22,9 +28,11 @@ public class NoteActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        noteTitleEditText = findViewById(R.id.noteTitleEditText);
-        noteContentEditText = findViewById(R.id.noteContentEditText);
+        this.noteTitleEditText = findViewById(R.id.noteTitleEditText);
+        this.noteContentEditText = findViewById(R.id.noteContentEditText);
+        this.isNewNote = true;
 
+        getAndSetIntentData();
     }
 
     @Override
@@ -38,8 +46,16 @@ public class NoteActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.saveNote) {
 
             DatabaseHelper databaseHelper = new DatabaseHelper(NoteActivity.this);
-            databaseHelper.addNote(noteTitleEditText.getText().toString().trim(),
-                    noteContentEditText.getText().toString().trim());
+            this.title = noteTitleEditText.getText().toString().trim();
+            this.content = noteContentEditText.getText().toString().trim();
+
+            if (this.isNewNote) {
+                this.isNewNote = false;
+                this.id = String.valueOf(databaseHelper.addNote(this.title, this.content));
+            } else {
+                databaseHelper.updateNote(this.id, this.title, this.content);
+            }
+
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -50,6 +66,21 @@ public class NoteActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void getAndSetIntentData() {
+        if (getIntent().hasExtra("id") && getIntent().hasExtra("title") && getIntent().hasExtra("content")) {
+
+            this.isNewNote = false;
+
+            this.id = getIntent().getStringExtra("id");
+            this.title = getIntent().getStringExtra("title");
+            this.content = getIntent().getStringExtra("content");
+
+            noteTitleEditText.setText(title);
+            noteContentEditText.setText(content);
+
+        }
     }
 
 }

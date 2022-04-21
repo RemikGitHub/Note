@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FloatingActionButton addButton;
     private DatabaseHelper databaseHelper;
+    private ArrayList<String> noteIds;
     private ArrayList<String> noteTitles;
     private ArrayList<String> noteContents;
     private CustomAdapter customAdapter;
@@ -42,12 +43,13 @@ public class MainActivity extends AppCompatActivity {
 
         databaseHelper = new DatabaseHelper(this);
 
+        noteIds = new ArrayList<>();
         noteTitles = new ArrayList<>();
         noteContents = new ArrayList<>();
 
         storeDataInArrays();
 
-        customAdapter = new CustomAdapter(MainActivity.this, noteTitles, noteContents);
+        customAdapter = new CustomAdapter(MainActivity.this, noteIds, noteTitles, noteContents);
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
     }
@@ -59,10 +61,12 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "There is no notes", Toast.LENGTH_SHORT).show();
         else {
             while (cursor.moveToNext()) {
+                noteIds.add(cursor.getString(0));
                 noteTitles.add(cursor.getString(1));
                 noteContents.add(cursor.getString(2));
             }
         }
+        cursor.close();
     }
 
 }
