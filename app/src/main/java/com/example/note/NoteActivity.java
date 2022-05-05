@@ -1,6 +1,5 @@
 package com.example.note;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,29 +42,28 @@ public class NoteActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.saveNote) {
+        switch (item.getItemId()) {
+            case R.id.saveNote:
 
-            DatabaseHelper databaseHelper = new DatabaseHelper(NoteActivity.this);
-            this.title = noteTitleEditText.getText().toString().trim();
-            this.content = noteContentEditText.getText().toString().trim();
+                DatabaseHelper databaseHelper = new DatabaseHelper(NoteActivity.this);
+                this.title = noteTitleEditText.getText().toString().trim();
+                this.content = noteContentEditText.getText().toString().trim();
 
-            if (this.isNewNote) {
-                this.isNewNote = false;
-                this.id = String.valueOf(databaseHelper.addNote(this.title, this.content));
-            } else {
-                databaseHelper.updateNote(this.id, this.title, this.content);
-            }
+                if (this.isNewNote) {
+                    this.isNewNote = false;
+                    this.id = String.valueOf(databaseHelper.addNote(this.title, this.content));
+                } else {
+                    databaseHelper.updateNote(this.id, this.title, this.content);
+                }
+                return true;
 
-            return true;
+            case R.id.action_settings:
+                // delete
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
     }
 
     private void getAndSetIntentData() {
@@ -82,5 +80,4 @@ public class NoteActivity extends AppCompatActivity {
 
         }
     }
-
 }

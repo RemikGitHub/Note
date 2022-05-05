@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         addButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, NoteActivity.class);
             startActivity(intent);
-            finish();
         });
 
         databaseHelper = new DatabaseHelper(this);
@@ -69,4 +68,9 @@ public class MainActivity extends AppCompatActivity {
         cursor.close();
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        recreate();
+    }
 }

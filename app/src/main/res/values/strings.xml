@@ -5,4 +5,5 @@
     <string name="title">Note</string>
     <string name="add_note_floating_button">Add note</string>
     <string name="note_title">Title</string>
+    <string name="action_settings">Delete note</string>
 </resources>
