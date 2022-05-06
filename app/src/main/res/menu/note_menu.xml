@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/save_note"
+        android:icon="@drawable/ic_save_notes_icon"
+        android:title="@string/title"
+        app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/action_settings"
+        android:title="@string/delete_single"
+        app:showAsAction="never"/>
+</menu>

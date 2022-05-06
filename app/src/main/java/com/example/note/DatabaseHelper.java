@@ -94,4 +94,9 @@ class DatabaseHelper extends SQLiteOpenHelper {
             Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
         }
     }
+
+    void deleteAllNotes() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_NAME);
+    }
 }

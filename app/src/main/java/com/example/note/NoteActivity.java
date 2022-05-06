@@ -37,14 +37,14 @@ public class NoteActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.note_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.saveNote:
+            case R.id.save_note:
                 DatabaseHelper databaseHelper = new DatabaseHelper(NoteActivity.this);
 
                 this.title = noteTitleEditText.getText().toString().trim();
