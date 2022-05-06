@@ -48,31 +48,31 @@ class DatabaseHelper extends SQLiteOpenHelper {
         long result = db.insert(TABLE_NAME, null, cv);
 
         if (result == -1) {
-            Toast.makeText(this.context, "Failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.context, "Save failed", Toast.LENGTH_SHORT).show();
             return null;
-        }
-        else {
-            Toast.makeText(this.context, "Note has been saved", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this.context, "Saved", Toast.LENGTH_SHORT).show();
             return result;
         }
     }
 
-    void updateNote(String row_id, String title, String content){
+    void updateNote(String row_id, String title, String content) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_TITLE, title);
         cv.put(COLUMN_CONTENT, content);
 
         long result = db.update(TABLE_NAME, cv, "_id=?", new String[]{row_id});
-        if(result == -1){
-            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(context, "Updated successfully", Toast.LENGTH_SHORT).show();
+
+        if (result == -1) {
+            Toast.makeText(context, "Update failed", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Updated", Toast.LENGTH_SHORT).show();
         }
 
     }
 
-    Cursor readAllNotes(){
+    Cursor readAllNotes() {
         String query = "SELECT * FROM " + TABLE_NAME;
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -82,5 +82,16 @@ class DatabaseHelper extends SQLiteOpenHelper {
             cursor = db.rawQuery(query, null);
         }
         return cursor;
+    }
+
+    void deleteNote(String row_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete(TABLE_NAME, "_id=?", new String[]{row_id});
+
+        if (result == -1) {
+            Toast.makeText(context, "Delete failed", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -5,6 +5,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -44,8 +45,8 @@ public class NoteActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.saveNote:
-
                 DatabaseHelper databaseHelper = new DatabaseHelper(NoteActivity.this);
+
                 this.title = noteTitleEditText.getText().toString().trim();
                 this.content = noteContentEditText.getText().toString().trim();
 
@@ -58,7 +59,8 @@ public class NoteActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_settings:
-                // delete
+                confirmDeleteDialog();
+
                 return true;
 
             default:
@@ -79,5 +81,20 @@ public class NoteActivity extends AppCompatActivity {
             noteContentEditText.setText(content);
 
         }
+    }
+
+    private void confirmDeleteDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Delete note");
+        builder.setMessage("Are you sure you want to delete the \"" + this.title + "\" note?");
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            DatabaseHelper databaseHelper = new DatabaseHelper(NoteActivity.this);
+            databaseHelper.deleteNote(this.id);
+            finish();
+        });
+        builder.setNegativeButton("No", (dialog, which) -> {
+        });
+        builder.create().show();
     }
 }
