@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -40,6 +42,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.noteTitleText.setText(noteTitles.get(position));
         holder.noteContentText.setText(noteContents.get(position));
+
         holder.mainLayout.setOnClickListener(v -> {
             Intent intent = new Intent(context, NoteActivity.class);
             intent.putExtra("id",noteIds.get(position));
@@ -65,6 +68,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             noteTitleText = itemView.findViewById(R.id.noteTitle);
             noteContentText = itemView.findViewById(R.id.noteContent);
             mainLayout = itemView.findViewById(R.id.mainLayout);
+
+            Animation translateAnim = AnimationUtils.loadAnimation(context, R.anim.translate_anim);
+            mainLayout.setAnimation(translateAnim);
         }
     }
 }
