@@ -23,6 +23,7 @@
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/menu/main_menu.xml" value="0.275" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/menu/menu.xml" value="0.275" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/menu/note_menu.xml" value="0.275" />
+        <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/menu/popup_menu.xml" value="0.275" />
       </map>
     </option>
   </component>
@@ -31,5 +32,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.4" />
+      </ProjectState>
+    </option>
   </component>
 </project>

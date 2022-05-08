@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     private final ArrayList<String> noteTitles;
     private final ArrayList<String> noteContents;
 
-    CustomAdapter(Context context,ArrayList<String> noteIds, ArrayList<String> noteTitles, ArrayList<String> noteContents) {
+    CustomAdapter(Context context, ArrayList<String> noteIds, ArrayList<String> noteTitles, ArrayList<String> noteContents) {
         this.context = context;
         this.noteIds = noteIds;
         this.noteTitles = noteTitles;
@@ -45,10 +47,35 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         holder.mainLayout.setOnClickListener(v -> {
             Intent intent = new Intent(context, NoteActivity.class);
-            intent.putExtra("id",noteIds.get(position));
-            intent.putExtra("title",noteTitles.get(position));
-            intent.putExtra("content",noteContents.get(position));
+            intent.putExtra("id", noteIds.get(position));
+            intent.putExtra("title", noteTitles.get(position));
+            intent.putExtra("content", noteContents.get(position));
             context.startActivity(intent);
+        });
+
+        holder.mainLayout.setOnLongClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(context, v);
+            popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
+
+            popupMenu.setOnMenuItemClickListener(item -> {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+                builder.setTitle("Delete note");
+                builder.setMessage("Are you sure you want to delete the \"" + noteTitles.get(position) + "\" note?");
+                builder.setPositiveButton("Yes", (dialog, which) -> {
+                    DatabaseHelper databaseHelper = new DatabaseHelper(context);
+                    databaseHelper.deleteNote(noteIds.get(position));
+                    notifyItemRemoved(position);
+                });
+                builder.setNegativeButton("No", (dialog, which) -> {
+                });
+                builder.create().show();
+
+                return true;
+            });
+            popupMenu.show();
+            return true;
         });
     }
 
@@ -72,5 +99,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             Animation translateAnim = AnimationUtils.loadAnimation(context, R.anim.translate_anim);
             mainLayout.setAnimation(translateAnim);
         }
+
+
     }
 }

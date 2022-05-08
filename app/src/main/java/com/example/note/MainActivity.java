@@ -124,6 +124,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        recreate();
+
+        this.overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 }

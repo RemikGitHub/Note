@@ -8,4 +8,5 @@
     <string name="delete_single">Delete note</string>
     <string name="delete_all">Delete all</string>
     <string name="empty">Empty</string>
+    <string name="delete_popup_item">Delete</string>
 </resources>
