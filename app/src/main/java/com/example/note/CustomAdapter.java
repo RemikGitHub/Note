@@ -66,7 +66,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                 builder.setPositiveButton("Yes", (dialog, which) -> {
                     DatabaseHelper databaseHelper = new DatabaseHelper(context);
                     databaseHelper.deleteNote(noteIds.get(position));
+
+                    noteIds.remove(position);
+                    noteTitles.remove(position);
+                    noteContents.remove(position);
+
                     notifyItemRemoved(position);
+                    notifyItemRangeChanged( position, noteIds.size());
+
                 });
                 builder.setNegativeButton("No", (dialog, which) -> {
                 });
