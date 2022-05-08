@@ -99,7 +99,5 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             Animation translateAnim = AnimationUtils.loadAnimation(context, R.anim.translate_anim);
             mainLayout.setAnimation(translateAnim);
         }
-
-
     }
 }
