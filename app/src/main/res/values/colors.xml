@@ -3,13 +3,29 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#888</color>
-    <color name="dark_gray">#101010</color>
     <color name="primary">#DDC919</color>
     <color name="primary_dark">#D9A00B</color>
     <color name="primary_light">#FFF9C4</color>
-    <color name="accent">#DD7600</color>
+    <color name="accent">#FDBE38</color>
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
     <color name="icons">#212121</color>
     <color name="divider">#BDBDBD</color>
+
+    <color name="background_dark">#292929</color>
+    <color name="text_hint">#7B7B7B</color>
+    <color name="search_background_light">#EEEEEE</color>
+    <color name="search_background_dark">#333333</color>
+    <color name="search_icon_light">#292929</color>
+    <color name="search_icon_dark">#DBDBDB</color>
+    <color name="note_date_color_light">#AEAEAE</color>
+    <color name="note_date_color_dark">#5B5B5B</color>
+    <color name="note_options_color_light">#FFFFFF</color>
+    <color name="note_options_color_dark">#1F1F1F</color>
+
+    <color name="colorNoteColor2">#FDBE3B</color>
+    <color name="colorNoteColor3">#FF4842</color>
+    <color name="colorNoteColor4">#3A52FC</color>
+    <color name="colorNoteColor5">#000000</color>
+    <color name="delete">#FF4842</color>
 </resources>

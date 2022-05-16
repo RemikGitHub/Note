@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/save_note"
-        android:icon="@drawable/ic_save_notes_icon"
+        android:icon="@drawable/ic_save_note"
         android:title="@string/title"
         app:showAsAction="ifRoom"/>
 

@@ -16,6 +16,11 @@
         <!-- Font. -->
         <item name="android:fontFamily">@font/ubuntu_medium</item>
         <item name="fontFamily">@font/ubuntu_medium</item>
+
+        <item name="colorSearchBackground">@color/search_background_light</item>
+        <item name="colorSearchIcon">@color/search_icon_light</item>
+        <item name="colorNoteDate">@color/note_date_color_light</item>
+        <item name="colorOptionsBackground">@color/note_options_color_light</item>
     </style>
 
     <style name="ToolBarStyle" parent="Theme.AppCompat">
@@ -26,7 +31,7 @@
         <item name="colorPrimaryVariant">@color/accent</item>
     </style>
 
-    <style name="CustomCardview" parent="CardView">
+    <style name="CustomCardView" parent="CardView">
         <item name="cardBackgroundColor">#F3931F</item>
     </style>
 </resources>

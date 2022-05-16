@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr format="color" name="colorSearchBackground"/>
+    <attr format="color" name="colorSearchIcon"/>
+    <attr format="color" name="colorNoteDate"/>
+    <attr format="color" name="colorOptionsBackground"/>
+</resources>

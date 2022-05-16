@@ -12,11 +12,15 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="cardBackgroundColor">@color/dark_gray</item>
-        <item name="android:colorBackground">@color/dark_gray</item>
+        <item name="cardBackgroundColor">@color/background_dark</item>
+        <item name="android:colorBackground">@color/background_dark</item>
         <!-- Font. -->
         <item name="android:fontFamily">@font/ubuntu_medium</item>
         <item name="fontFamily">@font/ubuntu_medium</item>
+        <item name="colorSearchBackground">@color/search_background_dark</item>
+        <item name="colorSearchIcon">@color/search_icon_dark</item>
+        <item name="colorNoteDate">@color/note_date_color_dark</item>
+        <item name="colorOptionsBackground">@color/note_options_color_dark</item>
     </style>
 
     <style name="ToolBarStyle" parent="Theme.AppCompat">

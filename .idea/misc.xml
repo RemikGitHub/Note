@@ -14,12 +14,26 @@
         <entry key="..\:/Users/remik/AndroidStudioProjects/Note/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2911458333333333" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable-anydpi/ic_save_notes_icon.xml" value="0.2911458333333333" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable-v21/custom_ripple.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/background_delete.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/background_note_color_1.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/background_note_color_2.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/background_note_color_3.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/background_note_color_4.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/background_note_color_5.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/background_save_note_button.xml" value="0.1675925925925926" />
+        <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/background_search.xml" value="0.15989583333333332" />
+        <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/background_subtitle_indicator.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/custom_ripple.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/ic_add.xml" value="0.2911458333333333" />
+        <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/ic_delete.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/ic_empty.xml" value="0.1984375" />
+        <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/ic_image.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/ic_save_note.xml" value="0.1675925925925926" />
+        <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/ic_search.xml" value="0.2911458333333333" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/layout-land/row.xml" value="0.2328042328042328" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/layout/activity_note.xml" value="0.264" />
+        <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/layout/layout_miscellaneous.xml" value="0.171875" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/layout/row.xml" value="0.1" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/layout/toolbar.xml" value="0.4" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/menu/main_menu.xml" value="0.275" />
