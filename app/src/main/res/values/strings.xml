@@ -11,7 +11,7 @@
     <string name="delete_popup_item">Delete</string>
     <string name="search_input_hint">Search notes</string>
     <string name="options">Options</string>
-    <string name="select_color">Select color</string>
+    <string name="select_color">Color</string>
     <string name="add_image">Add image</string>
     <string name="add_url">Add URL</string>
 </resources>
