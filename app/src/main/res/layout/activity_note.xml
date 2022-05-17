@@ -59,7 +59,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/noteTitleEditText" />
 
             <View
-                android:id="@+id/viewSubtitleIndicator"
+                android:id="@+id/viewTitleIndicator"
                 android:layout_width="8dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="18dp"

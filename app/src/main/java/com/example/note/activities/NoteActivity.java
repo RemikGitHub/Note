@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +23,7 @@ public class NoteActivity extends AppCompatActivity {
 
     private EditText noteTitleEditText;
     private EditText noteContentEditText;
+    private TextView noteCreationDateTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,7 @@ public class NoteActivity extends AppCompatActivity {
 
         this.noteTitleEditText = findViewById(R.id.noteTitleEditText);
         this.noteContentEditText = findViewById(R.id.noteContentEditText);
+        this.noteCreationDateTime = findViewById(R.id.textDateTime);
         this.isNewNote = true;
 
         getAndSetIntentData();
