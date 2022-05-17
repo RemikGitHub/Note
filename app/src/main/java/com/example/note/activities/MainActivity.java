@@ -192,10 +192,12 @@ public class MainActivity extends AppCompatActivity {
                     recyclerView.smoothScrollToPosition(0);
                 }
                 else if (requestCode == REQUEST_CODE_UPDATE_NOTE) {
-                    notes.add(noteChosenPosition, notesFromDb.get(noteChosenPosition));
+                    notes.remove(noteChosenPosition);
+                    notes.add(noteChosenPosition, notes.get(noteChosenPosition));
                     noteAdapter.notifyItemChanged(noteChosenPosition);
                 }
                 else if (requestCode == REQUEST_CODE_DELETE_NOTE) {
+                    notes.remove(noteChosenPosition);
                     noteAdapter.notifyItemRemoved(noteChosenPosition);
                 }
             });
