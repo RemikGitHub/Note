@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
                     recyclerView.smoothScrollToPosition(0);
                 } else if (requestCode == REQUEST_CODE_UPDATE_NOTE) {
                     notes.remove(noteChosenPosition);
-                    notes.add(noteChosenPosition, notes.get(noteChosenPosition));
+                    notes.add(noteChosenPosition, notesFromDb.get(noteChosenPosition));
                     noteAdapter.notifyItemChanged(noteChosenPosition);
                 } else if (requestCode == REQUEST_CODE_DELETE_NOTE) {
                     notes.remove(noteChosenPosition);
