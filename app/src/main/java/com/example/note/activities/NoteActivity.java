@@ -110,9 +110,18 @@ public class NoteActivity extends AppCompatActivity {
         builder.setTitle("Delete note");
         builder.setMessage("Are you sure you want to delete the \"" + this.title + "\" note?");
         builder.setPositiveButton("Yes", (dialog, which) -> {
-            DatabaseHelper databaseHelper = new DatabaseHelper(NoteActivity.this);
-            databaseHelper.deleteNote(this.id);
-            finish();
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Handler handler = new Handler(Looper.getMainLooper());
+
+            executor.execute(() -> {
+                NoteDatabase.getNoteDatabase(getApplicationContext()).noteDao().deleteNote(note);
+
+                handler.post(() -> {
+                    Intent intent = new Intent();
+                    setResult(MainActivity.REQUEST_CODE_DELETE_NOTE, intent);
+                    finish();
+                });
+            });
         });
         builder.setNegativeButton("No", (dialog, which) -> {
         });
