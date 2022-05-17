@@ -21,4 +21,7 @@ public interface NoteDao {
 
     @Delete
     void deleteNote(Note note);
+
+    @Query("DELETE FROM notes")
+    void deleteAllNotes();
 }

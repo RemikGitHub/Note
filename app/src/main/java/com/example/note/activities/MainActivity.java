@@ -115,53 +115,32 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
         }
     }
 
-//    private void storeDataInArrays() {
-//        Cursor cursor = databaseHelper.readAllNotes();
-//
-//        if (cursor.getCount() == 0) {
-//            emptyImage.setVisibility(View.VISIBLE);
-//            emptyText.setVisibility(View.VISIBLE);
-//        } else {
-//
-//            emptyImage.setVisibility(View.GONE);
-//            emptyText.setVisibility(View.GONE);
-//
-//            while (cursor.moveToNext()) {
-//                noteIds.add(cursor.getString(0));
-//                noteTitles.add(cursor.getString(1));
-//                noteContents.add(cursor.getString(2));
-//            }
-//        }
-//        cursor.close();
-//    }
-
     private void confirmDeleteDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Delete notes");
         builder.setMessage("Are you sure you want to delete all notes?");
         builder.setPositiveButton("Yes", (dialog, which) -> {
-            DatabaseHelper databaseHelper = new DatabaseHelper(this);
-            databaseHelper.deleteAllNotes();
-            Toast.makeText(this, "Deleted all notes", Toast.LENGTH_SHORT).show();
 
-            Intent intent = new Intent(this,MainActivity.class);
-            startActivity(intent);
-            finish();
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Handler handler = new Handler(Looper.getMainLooper());
+
+            executor.execute(() -> {
+                NoteDatabase.getNoteDatabase(getApplicationContext()).noteDao().deleteAllNotes();
+
+                handler.post(() -> {
+                    Toast.makeText(this, "Deleted all notes", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(this,MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                });
+            });
         });
         builder.setNegativeButton("No", (dialog, which) -> {
         });
         builder.create().show();
     }
-
-//    @Override
-//    protected void onRestart() {
-//        super.onRestart();
-//
-//        this.overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
-//        startActivity(new Intent(this, MainActivity.class));
-//        finish();
-//    }
 
     private void getNotes(final int requestCode) {
 
@@ -178,16 +157,13 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
                     noteAdapter.notifyDataSetChanged();
 
                     if (notes.size() == 0){
-                        emptyImage.setVisibility(View.VISIBLE);
-                        emptyText.setVisibility(View.VISIBLE);
+                        showEmptyContent();
                     } else {
-                        emptyImage.setVisibility(View.GONE);
-                        emptyText.setVisibility(View.GONE);
+                        hideEmptyContent();
                     }
                 }
                 else if (requestCode == REQUEST_CODE_ADD_NOTE) {
-                    emptyImage.setVisibility(View.GONE);
-                    emptyText.setVisibility(View.GONE);
+                    hideEmptyContent();
 
                     notes.add(0, notesFromDb.get(0));
                     noteAdapter.notifyItemInserted(0);
@@ -201,9 +177,23 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
                 else if (requestCode == REQUEST_CODE_DELETE_NOTE) {
                     notes.remove(noteChosenPosition);
                     noteAdapter.notifyItemRemoved(noteChosenPosition);
+
+                    if (notes.size() == 0){
+                        showEmptyContent();
+                    }
                 }
             });
         });
+    }
+
+    private void showEmptyContent(){
+        emptyImage.setVisibility(View.VISIBLE);
+        emptyText.setVisibility(View.VISIBLE);
+    }
+
+    private void hideEmptyContent(){
+        emptyImage.setVisibility(View.GONE);
+        emptyText.setVisibility(View.GONE);
     }
 
     @Override
