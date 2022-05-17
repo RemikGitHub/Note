@@ -22,6 +22,7 @@
         <item name="colorSearchIcon">@color/search_icon_light</item>
         <item name="colorNoteDate">@color/note_date_color_light</item>
         <item name="colorOptionsBackground">@color/note_options_color_light</item>
+        <item name="colorCardClick">@color/card_click_light</item>
     </style>
 
     <style name="ToolBarStyle" parent="Theme.AppCompat">

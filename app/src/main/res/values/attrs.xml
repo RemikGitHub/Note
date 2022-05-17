@@ -4,4 +4,5 @@
     <attr format="color" name="colorSearchIcon"/>
     <attr format="color" name="colorNoteDate"/>
     <attr format="color" name="colorOptionsBackground"/>
+    <attr format="color" name="colorCardClick"/>
 </resources>

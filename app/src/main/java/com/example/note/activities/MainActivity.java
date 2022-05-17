@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import com.example.note.R;
 import com.example.note.adapters.NoteAdapter;
 import com.example.note.database.NoteDatabase;
 import com.example.note.entities.Note;
+import com.example.note.listeners.NoteListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -31,7 +33,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NoteListener {
 
     private RecyclerView recyclerView;
     private List<Note> notes;
@@ -86,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         notes = new ArrayList<>();
-        noteAdapter = new NoteAdapter(MainActivity.this, notes);
+        noteAdapter = new NoteAdapter(MainActivity.this, notes, this);
 
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setAdapter(noteAdapter);
@@ -202,5 +204,51 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         });
+    }
+
+    @Override
+    public void onNoteClicked(Note note, int position) {
+        noteChosenPosition = position;
+
+        Intent intent = new Intent(getApplicationContext(), NoteActivity.class);
+        intent.putExtra("isNewNote", false);
+        intent.putExtra("note", note);
+
+        noteActivityResultLauncherAddNote.launch(intent);
+    }
+
+    @Override
+    public void onNoteLongClicked(Note note, int position, View view) {
+        noteChosenPosition = position;
+
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
+
+        popupMenu.setOnMenuItemClickListener(item -> {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            builder.setTitle("Delete note");
+            builder.setMessage("Are you sure you want to delete the \"" + note.getTitle() + "\" note?");
+            builder.setPositiveButton("Yes", (dialog, which) -> {
+
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                Handler handler = new Handler(Looper.getMainLooper());
+
+                executor.execute(() -> {
+                    NoteDatabase.getNoteDatabase(getApplicationContext()).noteDao().deleteNote(note);
+
+                    handler.post(() -> {
+                        getNotes(REQUEST_CODE_DELETE_NOTE);
+                    });
+                });
+            });
+            builder.setNegativeButton("No", (dialog, which) -> {
+            });
+            builder.create().show();
+
+            return true;
+        });
+        popupMenu.show();
     }
 }

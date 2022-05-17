@@ -23,6 +23,8 @@
     <color name="note_date_color_dark">#5B5B5B</color>
     <color name="note_options_color_light">#FFFFFF</color>
     <color name="note_options_color_dark">#1F1F1F</color>
+    <color name="card_click_light">#FFFFFF</color>
+    <color name="card_click_dark">#444444</color>
 
     <color name="colorNoteColor2">#FDBE3B</color>
     <color name="colorNoteColor3">#FF4842</color>

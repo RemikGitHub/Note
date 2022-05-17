@@ -92,16 +92,14 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     private void getAndSetIntentData() {
-        if (getIntent().hasExtra("id") && getIntent().hasExtra("title") && getIntent().hasExtra("content")) {
+        if (!getIntent().getBooleanExtra("isNewNote", true)) {
 
             this.isNewNote = false;
 
-            this.id = getIntent().getStringExtra("id");
-            this.title = getIntent().getStringExtra("title");
-            this.content = getIntent().getStringExtra("content");
+            this.note = (Note) getIntent().getSerializableExtra("note");
 
-            noteTitleEditText.setText(title);
-            noteContentEditText.setText(content);
+            noteTitleEditText.setText(note.getTitle());
+            noteContentEditText.setText(note.getContent());
 
         }
     }
