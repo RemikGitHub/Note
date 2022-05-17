@@ -53,11 +53,7 @@ public class NoteActivity extends AppCompatActivity {
 
         this.isNewNote = getIntent().getBooleanExtra("isNewNote", true);
 
-        noteCreationDateTime.setText(new SimpleDateFormat(
-                "HH:mm - EEEE, dd MMMM yyyy", Locale.getDefault()).format(new Date().getTime())
-        );
-
-        getAndSetIntentData();
+        setupActivity();
     }
 
     @Override
@@ -85,7 +81,7 @@ public class NoteActivity extends AppCompatActivity {
 
     }
 
-    private void getAndSetIntentData() {
+    private void setupActivity() {
         if (!getIntent().getBooleanExtra("isNewNote", true)) {
 
             this.isNewNote = false;
@@ -94,8 +90,13 @@ public class NoteActivity extends AppCompatActivity {
 
             noteTitleEditText.setText(note.getTitle());
             noteContentEditText.setText(note.getContent());
+            noteCreationDateTime.setText(note.getCreationDateTime());
 
         }
+
+        noteCreationDateTime.setText(new SimpleDateFormat(
+                "HH:mm - EEEE, dd MMMM yyyy", Locale.getDefault()).format(new Date().getTime())
+        );
     }
 
     private void confirmDeleteDialog() {
