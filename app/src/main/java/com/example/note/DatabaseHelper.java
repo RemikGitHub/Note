@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-class DatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "NoteDatabase.db";
     private static final int DATABASE_VERSION = 1;
@@ -19,7 +19,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_CONTENT = "note_content";
     private final Context context;
 
-    DatabaseHelper(@Nullable Context context) {
+    public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
@@ -38,7 +38,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
     }
 
-    Long addNote(String title, String content) {
+    public Long addNote(String title, String content) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -56,7 +56,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    void updateNote(String row_id, String title, String content) {
+    public void updateNote(String row_id, String title, String content) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_TITLE, title);
@@ -72,7 +72,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    Cursor readAllNotes() {
+    public Cursor readAllNotes() {
         String query = "SELECT * FROM " + TABLE_NAME;
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -84,7 +84,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    void deleteNote(String row_id) {
+    public void deleteNote(String row_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.delete(TABLE_NAME, "_id=?", new String[]{row_id});
 
@@ -95,7 +95,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    void deleteAllNotes() {
+    public void deleteAllNotes() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_NAME);
     }

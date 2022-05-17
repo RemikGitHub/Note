@@ -1,4 +1,4 @@
-package com.example.note;
+package com.example.note.activities;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -16,6 +16,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.note.CustomAdapter;
+import com.example.note.DatabaseHelper;
+import com.example.note.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.example.note;
+package com.example.note.activities;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,6 +8,9 @@ import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import com.example.note.DatabaseHelper;
+import com.example.note.R;
 
 public class NoteActivity extends AppCompatActivity {
 
