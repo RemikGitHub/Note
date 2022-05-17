@@ -3,6 +3,7 @@ package com.example.note.activities;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -12,6 +13,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.note.DatabaseHelper;
 import com.example.note.R;
+
+import java.util.Objects;
 
 public class NoteActivity extends AppCompatActivity {
 
@@ -32,11 +35,15 @@ public class NoteActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
         this.noteTitleEditText = findViewById(R.id.noteTitleEditText);
         this.noteContentEditText = findViewById(R.id.noteContentEditText);
         this.noteCreationDateTime = findViewById(R.id.textDateTime);
         this.isNewNote = true;
+
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         getAndSetIntentData();
     }
