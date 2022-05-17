@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
             handler.post(() -> {
                 if (requestCode == REQUEST_CODE_SHOW_NOTES) {
                     notes.addAll(notesFromDb);
-                    noteAdapter.notifyDataSetChanged();
+                    noteAdapter.notifyItemRangeChanged(0, notes.size());
 
                     if (notes.size() == 0) {
                         showEmptyContent();
