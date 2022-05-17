@@ -128,16 +128,20 @@ public class NoteActivity extends AppCompatActivity {
         final String noteText = noteContentEditText.getText().toString();
         final String noteDateTime = noteCreationDateTime.getText().toString();
 
-        final Note note = new Note();
-        note.setTitle(noteTitle);
-        note.setContent(noteText);
-        note.setCreationDateTime(noteDateTime);
+        final Note newNote = new Note();
+        newNote.setTitle(noteTitle);
+        newNote.setContent(noteText);
+        newNote.setCreationDateTime(noteDateTime);
+
+        if (!isNewNote) {
+            newNote.setId(note.getId());
+        }
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
 
         executor.execute(() -> {
-            NoteDatabase.getNoteDatabase(getApplicationContext()).noteDao().insertNote(note);
+            NoteDatabase.getNoteDatabase(getApplicationContext()).noteDao().insertNote(newNote);
 
             handler.post(() -> {
                 Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
