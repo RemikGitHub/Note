@@ -29,5 +29,6 @@
         <item name="actionMenuTextColor">@android:color/white</item>
         <item name="colorPrimary">@color/accent</item>
         <item name="colorPrimaryVariant">@color/accent</item>
+        <item name="android:fontFamily">@font/ubuntu_bold</item>
     </style>
 </resources>

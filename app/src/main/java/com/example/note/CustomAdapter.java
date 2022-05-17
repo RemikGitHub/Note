@@ -26,7 +26,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     private final ArrayList<String> noteTitles;
     private final ArrayList<String> noteContents;
 
-    CustomAdapter(Context context, ArrayList<String> noteIds, ArrayList<String> noteTitles, ArrayList<String> noteContents) {
+    public CustomAdapter(Context context, ArrayList<String> noteIds, ArrayList<String> noteTitles, ArrayList<String> noteContents) {
         this.context = context;
         this.noteIds = noteIds;
         this.noteTitles = noteTitles;
