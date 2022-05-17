@@ -14,6 +14,9 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.note.DatabaseHelper;
 import com.example.note.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 public class NoteActivity extends AppCompatActivity {
@@ -33,17 +36,21 @@ public class NoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
 
+        //toolbar settings
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         this.noteTitleEditText = findViewById(R.id.noteTitleEditText);
         this.noteContentEditText = findViewById(R.id.noteContentEditText);
         this.noteCreationDateTime = findViewById(R.id.textDateTime);
         this.isNewNote = true;
 
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        noteCreationDateTime.setText(new SimpleDateFormat(
+                "HH:mm - EEEE, dd MMMM yyyy", Locale.getDefault()).format(new Date().getTime())
+        );
 
         getAndSetIntentData();
     }

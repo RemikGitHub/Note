@@ -13,6 +13,7 @@
     <color name="divider">#BDBDBD</color>
 
     <color name="background_dark">#292929</color>
+    <color name="background_light">#F8F8FF</color>
     <color name="text_hint">#7B7B7B</color>
     <color name="search_background_light">#EEEEEE</color>
     <color name="search_background_dark">#333333</color>
