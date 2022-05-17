@@ -1,14 +1,11 @@
 package com.example.note.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,7 +14,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.note.DatabaseHelper;
 import com.example.note.R;
 import com.example.note.database.NoteDatabase;
 import com.example.note.entities.Note;
@@ -30,10 +26,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class NoteActivity extends AppCompatActivity {
-
-    private String id;
-    private String title;
-    private String content;
 
     private boolean isNewNote;
     private Note note;
@@ -76,19 +68,21 @@ public class NoteActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.save_note:
-                saveNote();
-                return true;
+        int itemId = item.getItemId();
 
-            case R.id.action_settings:
-                confirmDeleteDialog();
+        if (itemId == R.id.save_note) {
+            saveNote();
 
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+            return true;
         }
+        if (itemId == R.id.action_settings) {
+            confirmDeleteDialog();
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+
     }
 
     private void getAndSetIntentData() {
@@ -108,7 +102,7 @@ public class NoteActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Delete note");
-        builder.setMessage("Are you sure you want to delete the \"" + this.title + "\" note?");
+        builder.setMessage("Are you sure you want to delete the \"" + this.note.getTitle() + "\" note?");
         builder.setPositiveButton("Yes", (dialog, which) -> {
             ExecutorService executor = Executors.newSingleThreadExecutor();
             Handler handler = new Handler(Looper.getMainLooper());
@@ -148,10 +142,10 @@ public class NoteActivity extends AppCompatActivity {
                 Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent();
-                if (isNewNote){
+                if (isNewNote) {
                     setResult(MainActivity.REQUEST_CODE_ADD_NOTE, intent);
                     isNewNote = false;
-                }else {
+                } else {
                     setResult(MainActivity.REQUEST_CODE_UPDATE_NOTE, intent);
                 }
 

@@ -20,7 +20,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.example.note.DatabaseHelper;
 import com.example.note.R;
 import com.example.note.adapters.NoteAdapter;
 import com.example.note.database.NoteDatabase;
@@ -35,25 +34,22 @@ import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity implements NoteListener {
 
-    private RecyclerView recyclerView;
-    private List<Note> notes;
-    private NoteAdapter noteAdapter;
-
-    private FloatingActionButton addButton;
-    private ImageView emptyImage;
-    private TextView emptyText;
-
     public static final int REQUEST_CODE_ADD_NOTE = 1;
     public static final int REQUEST_CODE_UPDATE_NOTE = 2;
     public static final int REQUEST_CODE_SHOW_NOTES = 3;
     public static final int REQUEST_CODE_DELETE_NOTE = 4;
-
+    private RecyclerView recyclerView;
+    private List<Note> notes;
+    private NoteAdapter noteAdapter;
+    private FloatingActionButton addButton;
+    private ImageView emptyImage;
+    private TextView emptyText;
     private int noteChosenPosition = -1;
 
     private final ActivityResultLauncher<Intent> noteActivityResultLauncherAddNote = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                switch (result.getResultCode()){
+                switch (result.getResultCode()) {
                     case REQUEST_CODE_ADD_NOTE: {
                         getNotes(REQUEST_CODE_ADD_NOTE);
                         break;
@@ -104,15 +100,12 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.delete_all:
-                confirmDeleteDialog();
+        if (item.getItemId() == R.id.delete_all) {
+            confirmDeleteDialog();
 
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void confirmDeleteDialog() {
@@ -131,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
                 handler.post(() -> {
                     Toast.makeText(this, "Deleted all notes", Toast.LENGTH_SHORT).show();
 
-                    Intent intent = new Intent(this,MainActivity.class);
+                    Intent intent = new Intent(this, MainActivity.class);
                     startActivity(intent);
                     finish();
                 });
@@ -156,29 +149,26 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
                     notes.addAll(notesFromDb);
                     noteAdapter.notifyDataSetChanged();
 
-                    if (notes.size() == 0){
+                    if (notes.size() == 0) {
                         showEmptyContent();
                     } else {
                         hideEmptyContent();
                     }
-                }
-                else if (requestCode == REQUEST_CODE_ADD_NOTE) {
+                } else if (requestCode == REQUEST_CODE_ADD_NOTE) {
                     hideEmptyContent();
 
                     notes.add(0, notesFromDb.get(0));
                     noteAdapter.notifyItemInserted(0);
                     recyclerView.smoothScrollToPosition(0);
-                }
-                else if (requestCode == REQUEST_CODE_UPDATE_NOTE) {
+                } else if (requestCode == REQUEST_CODE_UPDATE_NOTE) {
                     notes.remove(noteChosenPosition);
                     notes.add(noteChosenPosition, notes.get(noteChosenPosition));
                     noteAdapter.notifyItemChanged(noteChosenPosition);
-                }
-                else if (requestCode == REQUEST_CODE_DELETE_NOTE) {
+                } else if (requestCode == REQUEST_CODE_DELETE_NOTE) {
                     notes.remove(noteChosenPosition);
                     noteAdapter.notifyItemRemoved(noteChosenPosition);
 
-                    if (notes.size() == 0){
+                    if (notes.size() == 0) {
                         showEmptyContent();
                     }
                 }
@@ -186,12 +176,12 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
         });
     }
 
-    private void showEmptyContent(){
+    private void showEmptyContent() {
         emptyImage.setVisibility(View.VISIBLE);
         emptyText.setVisibility(View.VISIBLE);
     }
 
-    private void hideEmptyContent(){
+    private void hideEmptyContent() {
         emptyImage.setVisibility(View.GONE);
         emptyText.setVisibility(View.GONE);
     }
@@ -228,9 +218,7 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
                 executor.execute(() -> {
                     NoteDatabase.getNoteDatabase(getApplicationContext()).noteDao().deleteNote(note);
 
-                    handler.post(() -> {
-                        getNotes(REQUEST_CODE_DELETE_NOTE);
-                    });
+                    handler.post(() -> getNotes(REQUEST_CODE_DELETE_NOTE));
                 });
             });
             builder.setNegativeButton("No", (dialog, which) -> {
