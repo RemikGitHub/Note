@@ -204,25 +204,25 @@ public class NoteActivity extends AppCompatActivity {
         }
 
         dialogLayout.findViewById(R.id.textDeleteNote).setOnClickListener(v -> {
+            Intent intent = new Intent();
+            if (this.isNewNote) {
+                setResult(MainActivity.REQUEST_CODE_DELETE_NEW_NOTE, intent);
+                dialogDeleteNote.dismiss();
+                finish();
+            } else {
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                Handler handler = new Handler(Looper.getMainLooper());
 
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            Handler handler = new Handler(Looper.getMainLooper());
+                executor.execute(() -> {
+                    NoteDatabase.getNoteDatabase(getApplicationContext()).noteDao().deleteNote(note);
 
-            executor.execute(() -> {
-                NoteDatabase.getNoteDatabase(getApplicationContext()).noteDao().deleteNote(note);
-
-                handler.post(() -> {
-                    dialogDeleteNote.dismiss();
-
-                    Intent intent = new Intent();
-                    if (this.isNewNote) {
-                        setResult(MainActivity.REQUEST_CODE_DELETE_NEW_NOTE, intent);
-                    } else {
+                    handler.post(() -> {
                         setResult(MainActivity.REQUEST_CODE_DELETE_NOTE, intent);
-                    }
-                    finish();
+                        dialogDeleteNote.dismiss();
+                        finish();
+                    });
                 });
-            });
+            }
         });
         dialogLayout.findViewById(R.id.deleteNoteCancel).setOnClickListener(v -> dialogDeleteNote.dismiss());
 
