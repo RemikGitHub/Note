@@ -122,8 +122,7 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
                 recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
                 recyclerView.setAdapter(noteAdapter);
 
-                String searchInputText = searchInput.getText().toString();
-                if (!searchInputText.isEmpty()) noteAdapter.getFilter().filter(searchInputText);
+                noteAdapter.getFilter().filter(searchInput.getText().toString());
 
                 searchInput.addTextChangedListener(new TextWatcher() {
                     @Override
@@ -235,8 +234,7 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
                         showEmptyContent();
                     }
                 }
-                String searchInputText = searchInput.getText().toString();
-                if (!searchInputText.isEmpty()) noteAdapter.getFilter().filter(searchInputText);
+                noteAdapter.getFilter().filter(searchInput.getText().toString());
             });
         });
     }

@@ -106,10 +106,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            notifyItemRangeChanged(0, notes.size());
             notes.clear();
             notes.addAll((List<Note>) results.values);
-            notifyItemRangeChanged(0, notes.size());
+            notifyDataSetChanged();
         }
     };
 
