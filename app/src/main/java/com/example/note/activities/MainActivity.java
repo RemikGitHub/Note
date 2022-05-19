@@ -5,10 +5,13 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
     private FloatingActionButton addButton;
     private ImageView emptyImage;
     private TextView emptyText;
+    private EditText searchInput;
     private int noteChosenPosition = -1;
 
     private AlertDialog dialogDeleteNote;
@@ -90,6 +94,21 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
         addButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, NoteActivity.class);
             noteActivityResultLauncherAddNote.launch(intent);
+        });
+
+        searchInput = findViewById(R.id.searchInput);
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                noteAdapter.searchNotes(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
         });
 
         notes = new ArrayList<>();

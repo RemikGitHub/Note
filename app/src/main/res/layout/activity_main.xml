@@ -38,7 +38,7 @@
             app:tint="?attr/colorSearchIcon" />
 
         <EditText
-            android:id="@+id/inputSearch"
+            android:id="@+id/searchInput"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="12dp"

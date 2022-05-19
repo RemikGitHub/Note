@@ -22,17 +22,20 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
-    private final List<Note> notes;
+    private List<Note> notes;
+    private final List<Note> notesBackup;
     private final Context context;
     private final NoteListener noteListener;
 
     public NoteAdapter(Context context, List<Note> notes, NoteListener noteListener) {
         this.context = context;
-        this.notes = notes;
         this.noteListener = noteListener;
+        this.notes = notes;
+        this.notesBackup = notes;
     }
 
     @NonNull
@@ -64,6 +67,25 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
     @Override
     public int getItemViewType(int position) {
         return position;
+    }
+
+    public void searchNotes(final String searchKeyword) {
+        notifyItemRangeChanged(0, notes.size());
+
+        if (searchKeyword.trim().isEmpty()) {
+            notes = notesBackup;
+        } else {
+            ArrayList<Note> searchedNotes = new ArrayList<>();
+            for (Note note : notesBackup) {
+                if (note.getTitle().toLowerCase().contains(searchKeyword.toLowerCase()) ||
+                        note.getContent().toLowerCase().contains(searchKeyword.toLowerCase())) {
+                    searchedNotes.add(note);
+                }
+            }
+            notes = searchedNotes;
+        }
+
+        notifyItemRangeChanged(0, notes.size());
     }
 
     public class NoteViewHolder extends RecyclerView.ViewHolder {
