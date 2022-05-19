@@ -259,8 +259,11 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
 
                 executor.execute(() -> {
                     NoteDatabase.getNoteDatabase(getApplicationContext()).noteDao().deleteNote(note);
-                    handler.post(() -> getNotes(REQUEST_CODE_DELETE_NOTE));
-                    dialogDeleteNote.dismiss();
+
+                    handler.post(() -> {
+                        getNotes(REQUEST_CODE_DELETE_NOTE);
+                        dialogDeleteNote.dismiss();
+                    });
                 });
             });
             dialogLayout.findViewById(R.id.deleteNoteCancel).setOnClickListener(v -> dialogDeleteNote.dismiss());
