@@ -180,6 +180,7 @@ public class NoteActivity extends AppCompatActivity {
         builder.setTitle("Delete note");
         builder.setMessage("Are you sure you want to delete the \"" + this.note.getTitle() + "\" note?");
         builder.setPositiveButton("Yes", (dialog, which) -> {
+
             ExecutorService executor = Executors.newSingleThreadExecutor();
             Handler handler = new Handler(Looper.getMainLooper());
 
@@ -188,8 +189,14 @@ public class NoteActivity extends AppCompatActivity {
 
                 handler.post(() -> {
                     Intent intent = new Intent();
-                    setResult(MainActivity.REQUEST_CODE_DELETE_NOTE, intent);
-                    finish();
+
+                    if (this.isNewNote) {
+                        setResult(MainActivity.REQUEST_CODE_DELETE_NEW_NOTE, intent);
+                        finish();
+                    } else {
+                        setResult(MainActivity.REQUEST_CODE_DELETE_NOTE, intent);
+                        finish();
+                    }
                 });
             });
         });
@@ -225,7 +232,6 @@ public class NoteActivity extends AppCompatActivity {
                 } else {
                     setResult(MainActivity.REQUEST_CODE_UPDATE_NOTE, intent);
                 }
-
             });
         });
     }
