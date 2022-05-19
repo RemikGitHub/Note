@@ -11,9 +11,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,9 +43,8 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
 
     public static final int REQUEST_CODE_ADD_NOTE = 1;
     public static final int REQUEST_CODE_UPDATE_NOTE = 2;
-    public static final int REQUEST_CODE_SHOW_NOTES = 3;
-    public static final int REQUEST_CODE_DELETE_NOTE = 4;
-    public static final int REQUEST_CODE_DELETE_NEW_NOTE = 5;
+    public static final int REQUEST_CODE_DELETE_NOTE = 3;
+    public static final int REQUEST_CODE_DELETE_NEW_NOTE = 4;
 
     private RecyclerView recyclerView;
     private List<Note> notes;
@@ -102,26 +103,64 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                noteAdapter.searchNotes(s.toString());
+                noteAdapter.getFilter().filter(s.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
             }
         });
-
-        notes = new ArrayList<>();
-        noteAdapter = new NoteAdapter(MainActivity.this, notes, this);
-
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        recyclerView.setAdapter(noteAdapter);
-
-        getNotes(REQUEST_CODE_SHOW_NOTES);
+        initRecyclerView();
     }
+
+    private void initRecyclerView() {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        executor.execute(() -> {
+
+            ArrayList<Note> notesFromDb = (ArrayList<Note>) NoteDatabase.getNoteDatabase(getApplicationContext()).noteDao().getAllNotes();
+
+            handler.post(() -> {
+                notes = new ArrayList<>(notesFromDb);
+
+                noteAdapter = new NoteAdapter(MainActivity.this, notes, this);
+                noteAdapter.notifyItemRangeChanged(0, notes.size());
+
+                if (notes.size() == 0) {
+                    showEmptyContent();
+                } else {
+                    hideEmptyContent();
+                }
+
+                recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+                recyclerView.setAdapter(noteAdapter);
+            });
+        });
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        MenuItem searchNote = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchNote.getActionView();
+        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                noteAdapter.getFilter().filter(newText);
+
+                return false;
+            }
+        });
         return true;
     }
 
@@ -180,30 +219,15 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
             ArrayList<Note> notesFromDb = (ArrayList<Note>) NoteDatabase.getNoteDatabase(getApplicationContext()).noteDao().getAllNotes();
 
             handler.post(() -> {
-                if (requestCode == REQUEST_CODE_SHOW_NOTES) {
-                    notes.addAll(notesFromDb);
-                    noteAdapter.notifyItemRangeChanged(0, notes.size());
-
-                    if (notes.size() == 0) {
-                        showEmptyContent();
-                    } else {
-                        hideEmptyContent();
-                    }
-                } else if (requestCode == REQUEST_CODE_ADD_NOTE) {
+                if (requestCode == REQUEST_CODE_ADD_NOTE) {
                     hideEmptyContent();
-
-                    notes.add(0, notesFromDb.get(0));
-                    noteAdapter.notifyItemInserted(0);
+                    noteAdapter.addNote(0, notesFromDb.get(0));
                     recyclerView.smoothScrollToPosition(0);
                 } else if (requestCode == REQUEST_CODE_UPDATE_NOTE) {
-                    notes.remove(noteChosenPosition);
-                    notes.add(noteChosenPosition, notesFromDb.get(noteChosenPosition));
-                    noteAdapter.notifyItemChanged(noteChosenPosition);
+                    noteAdapter.updateNote(noteChosenPosition, notesFromDb.get(noteChosenPosition));
                 } else if (requestCode == REQUEST_CODE_DELETE_NOTE) {
-                    notes.remove(noteChosenPosition);
-                    noteAdapter.notifyItemRemoved(noteChosenPosition);
-
-                    if (notes.size() == 0) {
+                    noteAdapter.deleteNote(noteChosenPosition);
+                    if (noteAdapter.thereAreNoNotes()) {
                         showEmptyContent();
                     }
                 }

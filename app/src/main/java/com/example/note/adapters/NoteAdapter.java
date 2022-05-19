@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,9 +27,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
+public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> implements Filterable {
     private List<Note> notes;
-    private final List<Note> notesBackup;
+    public List<Note> notesBackup;
     private final Context context;
     private final NoteListener noteListener;
 
@@ -35,7 +37,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         this.context = context;
         this.noteListener = noteListener;
         this.notes = notes;
-        this.notesBackup = notes;
+        this.notesBackup = new ArrayList<>(notes);
     }
 
     @NonNull
@@ -69,23 +71,64 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         return position;
     }
 
-    public void searchNotes(final String searchKeyword) {
-        notifyItemRangeChanged(0, notes.size());
+    @Override
+    public Filter getFilter() {
+        return noteFilter;
+    }
 
-        if (searchKeyword.trim().isEmpty()) {
-            notes = notesBackup;
-        } else {
-            ArrayList<Note> searchedNotes = new ArrayList<>();
-            for (Note note : notesBackup) {
-                if (note.getTitle().toLowerCase().contains(searchKeyword.toLowerCase()) ||
-                        note.getContent().toLowerCase().contains(searchKeyword.toLowerCase())) {
-                    searchedNotes.add(note);
+    private Filter noteFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Note> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(notesBackup);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (Note note : notesBackup) {
+                    if (note.getTitle().toLowerCase().contains(filterPattern) ||
+                            note.getContent().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(note);
+                    }
                 }
             }
-            notes = searchedNotes;
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            return results;
         }
 
-        notifyItemRangeChanged(0, notes.size());
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            notifyItemRangeChanged(0, notes.size());
+            notes.clear();
+            notes.addAll((List<Note>)results.values);
+            notifyItemRangeChanged(0, notes.size());
+        }
+    };
+
+    public void deleteNote(int position) {
+        notesBackup.remove(notes.get(position));
+        notes.remove(position);
+
+        notifyItemRemoved(position);
+    }
+
+    public void updateNote(int position, Note note) {
+        notesBackup.set(notesBackup.indexOf(notes.get(position)), note);
+        notes.set(position, note);
+
+        notifyItemChanged(position);
+    }
+
+    public void addNote(int position, Note note) {
+        notesBackup.add(0, note);
+        notes.add(0, note);
+        notifyItemInserted(position);
+    }
+
+    public boolean thereAreNoNotes(){
+        return notesBackup.isEmpty();
     }
 
     public class NoteViewHolder extends RecyclerView.ViewHolder {
