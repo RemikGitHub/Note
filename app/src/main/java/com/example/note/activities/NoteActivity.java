@@ -1,8 +1,6 @@
 package com.example.note.activities;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -20,8 +18,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.example.note.R;
 import com.example.note.database.NoteDatabase;
@@ -29,6 +25,7 @@ import com.example.note.entities.Note;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
@@ -97,21 +94,20 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     private void setupActivity() {
-        if (!getIntent().getBooleanExtra("isNewNote", true)) {
-
-            this.isNewNote = false;
-
+        if (!this.isNewNote) {
             this.note = (Note) getIntent().getSerializableExtra("note");
 
             noteTitleEditText.setText(note.getTitle());
             noteContentEditText.setText(note.getContent());
             noteCreationDateTime.setText(note.getCreationDateTime());
 
-        }
+        } else {
+            this.note = new Note();
 
-        noteCreationDateTime.setText(new SimpleDateFormat(
-                "HH:mm - EEEE, dd MMMM yyyy", Locale.getDefault()).format(new Date().getTime())
-        );
+            noteCreationDateTime.setText(new SimpleDateFormat(
+                    "HH:mm - EEEE, dd MMMM yyyy", Locale.getDefault()).format(new Date().getTime())
+            );
+        }
     }
 
     private void confirmDeleteDialog() {
@@ -143,21 +139,16 @@ public class NoteActivity extends AppCompatActivity {
         final String noteText = noteContentEditText.getText().toString();
         final String noteDateTime = noteCreationDateTime.getText().toString();
 
-        final Note newNote = new Note();
-        newNote.setTitle(noteTitle);
-        newNote.setContent(noteText);
-        newNote.setCreationDateTime(noteDateTime);
-        newNote.setColor(selectedNoteColor);
-
-        if (!isNewNote) {
-            newNote.setId(note.getId());
-        }
+        note.setTitle(noteTitle);
+        note.setContent(noteText);
+        note.setCreationDateTime(noteDateTime);
+        note.setColor(selectedNoteColor);
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
 
         executor.execute(() -> {
-            NoteDatabase.getNoteDatabase(getApplicationContext()).noteDao().insertNote(newNote);
+            long newId = NoteDatabase.getNoteDatabase(getApplicationContext()).noteDao().insertNote(note);
 
             handler.post(() -> {
                 Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
@@ -165,7 +156,7 @@ public class NoteActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 if (isNewNote) {
                     setResult(MainActivity.REQUEST_CODE_ADD_NOTE, intent);
-                    isNewNote = false;
+                    note.setId(newId);
                 } else {
                     setResult(MainActivity.REQUEST_CODE_UPDATE_NOTE, intent);
                 }
@@ -174,12 +165,12 @@ public class NoteActivity extends AppCompatActivity {
         });
     }
 
-    private void setTitleIndicatorColor(){
+    private void setTitleIndicatorColor() {
         GradientDrawable gradientDrawable = (GradientDrawable) titleIndicator.getBackground();
         gradientDrawable.setColor(Color.parseColor(selectedNoteColor));
     }
 
-    private void setImageViewsColor(String color, int chosenColor){
+    private void setImageViewsColor(String color, int chosenColor) {
         final LinearLayout layoutOptions = findViewById(R.id.layoutOptions);
 
         final ImageView imageColorDefault = layoutOptions.findViewById(R.id.imageColorDefault);
@@ -197,23 +188,23 @@ public class NoteActivity extends AppCompatActivity {
         imageColorBlack.setImageResource(0);
 
         switch (chosenColor) {
-            case 0:{
+            case 0: {
                 imageColorDefault.setImageResource(R.drawable.ic_done);
                 break;
             }
-            case 1:{
+            case 1: {
                 imageColorYellow.setImageResource(R.drawable.ic_done);
                 break;
             }
-            case 2:{
+            case 2: {
                 imageColorRed.setImageResource(R.drawable.ic_done);
                 break;
             }
-            case 3:{
+            case 3: {
                 imageColorBlue.setImageResource(R.drawable.ic_done);
                 break;
             }
-            case 4:{
+            case 4: {
                 imageColorBlack.setImageResource(R.drawable.ic_done);
                 break;
             }

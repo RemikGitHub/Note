@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class Note implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
 
     @ColumnInfo(name = "title")
     private String title;
@@ -37,11 +37,11 @@ public class Note implements Serializable {
         return title + "：" + creationDateTime;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
