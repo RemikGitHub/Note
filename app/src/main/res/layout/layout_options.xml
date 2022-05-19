@@ -188,4 +188,33 @@
             android:textSize="18sp" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/setNotification"
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:layout_width="33dp"
+            android:layout_height="33dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_notification" />
+
+        <TextView
+            android:id="@+id/textNotificationNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:fontFamily="@font/ubuntu_medium"
+            android:includeFontPadding="false"
+            android:text="@string/add_notification"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
 </LinearLayout>

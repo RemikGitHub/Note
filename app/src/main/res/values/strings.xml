@@ -22,4 +22,5 @@
     <string name="delete_all_notes_dialog_title">Delete all</string>
     <string name="delete_all_notes_dialog_message">Are you sure you want to delete all notes?</string>
     <string name="search">Search</string>
+    <string name="add_notification">Add notification</string>
 </resources>
