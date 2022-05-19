@@ -81,7 +81,7 @@
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/app_name"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/noteTitleEditText" />
+                app:layout_constraintTop_toBottomOf="@id/textDateTime" />
 
             <ImageView
                 android:id="@+id/imageRemoveImage"
@@ -146,7 +146,7 @@
                 android:importantForAutofill="no"
                 android:includeFontPadding="false"
                 android:inputType="textMultiLine"
-                android:minHeight="150dp"
+                android:minHeight="250dp"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/layoutWebURL" />

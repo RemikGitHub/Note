@@ -14,7 +14,8 @@
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:visibility="gone"
-        app:riv_corner_radius="25dp" />
+        app:riv_corner_radius_top_left="15dp"
+        app:riv_corner_radius_top_right="15dp"/>
 
     <TextView
         android:id="@+id/noteTitle"
@@ -57,5 +58,5 @@
         android:layout_marginBottom="12dp"
         android:fontFamily="@font/ubuntu_regular"
         android:includeFontPadding="false"
-        android:textSize="9sp" />
+        android:textSize="8sp" />
 </LinearLayout>

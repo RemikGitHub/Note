@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
     public static final int REQUEST_CODE_UPDATE_NOTE = 2;
     public static final int REQUEST_CODE_SHOW_NOTES = 3;
     public static final int REQUEST_CODE_DELETE_NOTE = 4;
+
     private RecyclerView recyclerView;
     private List<Note> notes;
     private NoteAdapter noteAdapter;

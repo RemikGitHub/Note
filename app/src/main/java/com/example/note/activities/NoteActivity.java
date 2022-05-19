@@ -1,11 +1,19 @@
 package com.example.note.activities;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,9 +23,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import com.example.note.R;
 import com.example.note.database.NoteDatabase;
@@ -46,9 +57,41 @@ public class NoteActivity extends AppCompatActivity {
     private EditText noteContentEditText;
     private TextView noteCreationDateTime;
     private View titleIndicator;
+    private ImageView imageView;
 
     private String selectedNoteColor;
+    private String selectedImagePath;
 
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    selectImage();
+                } else {
+                    Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+    private final ActivityResultLauncher<Intent> activityResultLauncherImageActivity = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    try {
+                        if (result.getData() != null) {
+                            Uri selectedImageUri = result.getData().getData();
+                            Bitmap bitmap = BitmapFactory.decodeStream(getBaseContext().getContentResolver().openInputStream(selectedImageUri));
+                            imageView.setImageBitmap(bitmap);
+
+                            imageView.setVisibility(View.VISIBLE);
+                            findViewById(R.id.imageRemoveImage).setVisibility(View.VISIBLE);
+
+                            selectedImagePath = selectedImageUri.getLastPathSegment();
+                        }
+                    } catch (Exception exception) {
+                        Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +109,15 @@ public class NoteActivity extends AppCompatActivity {
         this.noteContentEditText = findViewById(R.id.noteContentEditText);
         this.noteCreationDateTime = findViewById(R.id.textDateTime);
         this.titleIndicator = findViewById(R.id.titleIndicator);
+        this.imageView = findViewById(R.id.imageNote);
         this.isNewNote = getIntent().getBooleanExtra("isNewNote", true);
+
+        findViewById(R.id.imageRemoveImage).setOnClickListener(v -> {
+            imageView.setImageBitmap(null);
+            imageView.setVisibility(View.GONE);
+            findViewById(R.id.imageRemoveImage).setVisibility(View.GONE);
+            selectedImagePath = "";
+        });
 
         setupActivity();
         initOptions();
@@ -105,10 +156,18 @@ public class NoteActivity extends AppCompatActivity {
             this.noteContentEditText.setText(note.getContent());
             this.noteCreationDateTime.setText(note.getCreationDateTime());
             this.selectedNoteColor = note.getColor();
+            this.selectedImagePath = note.getImagePath();
+
+            if (this.selectedImagePath != null && !this.selectedImagePath.trim().isEmpty()) {
+                imageView.setImageBitmap(BitmapFactory.decodeFile(this.selectedImagePath));
+                imageView.setVisibility(View.VISIBLE);
+                findViewById(R.id.imageRemoveImage).setVisibility(View.VISIBLE);
+            }
 
         } else {
             this.note = new Note();
             this.selectedNoteColor = COLOR_DEFAULT;
+            this.selectedImagePath = "";
             this.noteCreationDateTime.setText(new SimpleDateFormat(
                     "HH:mm - EEEE, dd MMMM yyyy", Locale.getDefault()).format(new Date().getTime())
             );
@@ -140,14 +199,15 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     private void saveNote() {
-        final String noteTitle = noteTitleEditText.getText().toString();
-        final String noteText = noteContentEditText.getText().toString();
-        final String noteDateTime = noteCreationDateTime.getText().toString();
+        final String noteTitle = this.noteTitleEditText.getText().toString();
+        final String noteText = this.noteContentEditText.getText().toString();
+        final String noteDateTime = this.noteCreationDateTime.getText().toString();
 
-        note.setTitle(noteTitle);
-        note.setContent(noteText);
-        note.setCreationDateTime(noteDateTime);
-        note.setColor(selectedNoteColor);
+        this.note.setTitle(noteTitle);
+        this.note.setContent(noteText);
+        this.note.setCreationDateTime(noteDateTime);
+        this.note.setColor(this.selectedNoteColor);
+        this.note.setImagePath(this.selectedImagePath);
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
@@ -258,29 +318,24 @@ public class NoteActivity extends AppCompatActivity {
                 break;
         }
 
+
+        layoutOptions.findViewById(R.id.layoutAddImage).setOnClickListener(v -> {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                selectImage();
+            } else {
+                requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+
+        });
     }
-//
-//        layoutOptions.findViewById(R.id.layoutAddImage).setOnClickListener(v -> {
-//            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-//            if (ContextCompat.checkSelfPermission(getApplicationContext(),
-//                    Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-//                ActivityCompat.requestPermissions(CreateNoteActivity.this,
-//                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_STORAGE_PERMISSION);
-//            } else {
-//                selectImage();
-//            }
-//        });
-//
-//        layoutOptions.findViewById(R.id.layoutAddUrl).setOnClickListener(v -> {
-//            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-//            showAddURLDialog();
-//        });
-//
-//        if (alreadyAvailableNote != null) {
-//            layoutOptions.findViewById(R.id.layoutDeleteNote).setVisibility(View.VISIBLE);
-//            layoutOptions.findViewById(R.id.layoutDeleteNote).setOnClickListener(v -> {
-//                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-//                showDeleteNoteDialog();
-//            });
-//        }
+
+    @SuppressLint("QueryPermissionsNeeded")
+    private void selectImage() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            this.activityResultLauncherImageActivity.launch(intent);
+        }
+    }
 }

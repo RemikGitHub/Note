@@ -1,6 +1,7 @@
 package com.example.note.adapters;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
@@ -23,7 +24,7 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
-    private List<Note> notes;
+    private final List<Note> notes;
     private final Context context;
     private final NoteListener noteListener;
 
@@ -65,12 +66,12 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
     }
 
     public class NoteViewHolder extends RecyclerView.ViewHolder {
-        TextView noteTitleText;
-        TextView noteContentText;
-        TextView noteCreationDateTimeText;
+        private final TextView noteTitleText;
+        private final TextView noteContentText;
+        private final TextView noteCreationDateTimeText;
 
-        LinearLayout cardLayout;
-        RoundedImageView imageNote;
+        private final LinearLayout cardLayout;
+        private final RoundedImageView imageNote;
 
         NoteViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -89,13 +90,12 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
             noteContentText.setText(note.getContent());
             noteCreationDateTimeText.setText(note.getCreationDateTime());
 
-
             GradientDrawable gradientDrawable = new GradientDrawable();
-            gradientDrawable.setCornerRadius(25);
+            gradientDrawable.setCornerRadius(43);
             gradientDrawable.setColor(Color.parseColor(note.getColor()));
 
             GradientDrawable gradientDrawableClick = new GradientDrawable();
-            gradientDrawableClick.setCornerRadius(25);
+            gradientDrawableClick.setCornerRadius(43);
             gradientDrawableClick.setColor(Color.parseColor("#CCCCCC"));
 
             StateListDrawable res = new StateListDrawable();
@@ -104,6 +104,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
             res.addState(new int[]{android.R.attr.state_pressed}, gradientDrawableClick);
             res.addState(new int[]{}, gradientDrawable);
             cardLayout.setBackground(res);
+
+            if (note.getImagePath() != null && !note.getImagePath().trim().isEmpty()) {
+                imageNote.setImageBitmap(BitmapFactory.decodeFile(note.getImagePath()));
+                imageNote.setVisibility(View.VISIBLE);
+            } else {
+                imageNote.setVisibility(View.GONE);
+            }
 
         }
 
