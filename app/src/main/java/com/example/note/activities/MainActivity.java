@@ -1,14 +1,15 @@
 package com.example.note.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
     private ImageView emptyImage;
     private TextView emptyText;
     private int noteChosenPosition = -1;
+
+    private AlertDialog dialogDeleteNote;
+    private AlertDialog dialogDeleteAllNotes;
 
     private final ActivityResultLauncher<Intent> noteActivityResultLauncherAddNote = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -114,30 +118,38 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
     }
 
     private void confirmDeleteDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (this.dialogDeleteAllNotes == null) {
+            View dialogLayout = LayoutInflater.from(this).inflate(R.layout.layout_delete_all_notes_dialog, findViewById(R.id.layoutDeleteNoteContainer));
 
-        builder.setTitle("Delete notes");
-        builder.setMessage("Are you sure you want to delete all notes?");
-        builder.setPositiveButton("Yes", (dialog, which) -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setView(dialogLayout);
 
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            Handler handler = new Handler(Looper.getMainLooper());
+            this.dialogDeleteAllNotes = builder.create();
 
-            executor.execute(() -> {
-                NoteDatabase.getNoteDatabase(getApplicationContext()).noteDao().deleteAllNotes();
+            if (this.dialogDeleteAllNotes.getWindow() != null) {
+                this.dialogDeleteAllNotes.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+            }
 
-                handler.post(() -> {
-                    Toast.makeText(this, "Deleted all notes", Toast.LENGTH_SHORT).show();
+            dialogLayout.findViewById(R.id.textDeleteNote).setOnClickListener(v -> {
 
-                    Intent intent = new Intent(this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                Handler handler = new Handler(Looper.getMainLooper());
+
+                executor.execute(() -> {
+                    NoteDatabase.getNoteDatabase(getApplicationContext()).noteDao().deleteAllNotes();
+
+                    handler.post(() -> {
+                        this.dialogDeleteAllNotes.dismiss();
+                        Toast.makeText(this, "Deleted all notes", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    });
                 });
             });
-        });
-        builder.setNegativeButton("No", (dialog, which) -> {
-        });
-        builder.create().show();
+            dialogLayout.findViewById(R.id.deleteNoteCancel).setOnClickListener(v -> this.dialogDeleteAllNotes.dismiss());
+        }
+        this.dialogDeleteAllNotes.show();
     }
 
     private void getNotes(final int requestCode) {
@@ -206,32 +218,31 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
     public void onNoteLongClicked(Note note, int position, View view) {
         noteChosenPosition = position;
 
-        PopupMenu popupMenu = new PopupMenu(this, view);
-        popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
-
-        popupMenu.setOnMenuItemClickListener(item -> {
+        if (this.dialogDeleteNote == null) {
+            View dialogLayout = LayoutInflater.from(this).inflate(R.layout.layout_delete_note_dialog, findViewById(R.id.layoutDeleteNoteContainer));
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setView(dialogLayout);
 
-            builder.setTitle("Delete note");
-            builder.setMessage("Are you sure you want to delete the \"" + note.getTitle() + "\" note?");
-            builder.setPositiveButton("Yes", (dialog, which) -> {
+            this.dialogDeleteNote = builder.create();
+
+            if (this.dialogDeleteNote.getWindow() != null) {
+                this.dialogDeleteNote.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+            }
+
+            dialogLayout.findViewById(R.id.textDeleteNote).setOnClickListener(v -> {
 
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 Handler handler = new Handler(Looper.getMainLooper());
 
                 executor.execute(() -> {
                     NoteDatabase.getNoteDatabase(getApplicationContext()).noteDao().deleteNote(note);
-
                     handler.post(() -> getNotes(REQUEST_CODE_DELETE_NOTE));
+                    dialogDeleteNote.dismiss();
                 });
             });
-            builder.setNegativeButton("No", (dialog, which) -> {
-            });
-            builder.create().show();
-
-            return true;
-        });
-        popupMenu.show();
+            dialogLayout.findViewById(R.id.deleteNoteCancel).setOnClickListener(v -> this.dialogDeleteNote.dismiss());
+        }
+        this.dialogDeleteNote.show();
     }
 }

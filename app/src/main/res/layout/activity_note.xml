@@ -127,7 +127,7 @@
                     android:layout_height="25dp"
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/ic_delete"
-                    app:tint="@color/delete" />
+                    app:tint="@color/warning" />
 
             </LinearLayout>
 

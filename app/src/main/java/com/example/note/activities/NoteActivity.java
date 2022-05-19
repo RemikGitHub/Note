@@ -67,7 +67,6 @@ public class NoteActivity extends AppCompatActivity {
     private String selectedImagePath;
     private String writtenWebUrl;
 
-
     private AlertDialog dialogAddUrl;
     private AlertDialog dialogDeleteNote;
 
@@ -196,33 +195,42 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     private void confirmDeleteDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (dialogDeleteNote == null) {
+            View dialogLayout = LayoutInflater.from(this).inflate(R.layout.layout_delete_note_dialog, findViewById(R.id.layoutDeleteNoteContainer));
 
-        builder.setTitle("Delete note");
-        builder.setMessage("Are you sure you want to delete the \"" + this.note.getTitle() + "\" note?");
-        builder.setPositiveButton("Yes", (dialog, which) -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setView(dialogLayout);
 
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            Handler handler = new Handler(Looper.getMainLooper());
+            this.dialogDeleteNote = builder.create();
 
-            executor.execute(() -> {
-                NoteDatabase.getNoteDatabase(getApplicationContext()).noteDao().deleteNote(note);
+            if (this.dialogDeleteNote.getWindow() != null) {
+                this.dialogDeleteNote.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+            }
 
-                handler.post(() -> {
-                    Intent intent = new Intent();
+            dialogLayout.findViewById(R.id.textDeleteNote).setOnClickListener(v -> {
 
-                    if (this.isNewNote) {
-                        setResult(MainActivity.REQUEST_CODE_DELETE_NEW_NOTE, intent);
-                    } else {
-                        setResult(MainActivity.REQUEST_CODE_DELETE_NOTE, intent);
-                    }
-                    finish();
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                Handler handler = new Handler(Looper.getMainLooper());
+
+                executor.execute(() -> {
+                    NoteDatabase.getNoteDatabase(getApplicationContext()).noteDao().deleteNote(note);
+
+                    handler.post(() -> {
+                        this.dialogDeleteNote.dismiss();
+
+                        Intent intent = new Intent();
+                        if (this.isNewNote) {
+                            setResult(MainActivity.REQUEST_CODE_DELETE_NEW_NOTE, intent);
+                        } else {
+                            setResult(MainActivity.REQUEST_CODE_DELETE_NOTE, intent);
+                        }
+                        finish();
+                    });
                 });
             });
-        });
-        builder.setNegativeButton("No", (dialog, which) -> {
-        });
-        builder.create().show();
+            dialogLayout.findViewById(R.id.deleteNoteCancel).setOnClickListener(v -> this.dialogDeleteNote.dismiss());
+        }
+        dialogDeleteNote.show();
     }
 
     private void saveNote() {
@@ -374,7 +382,7 @@ public class NoteActivity extends AppCompatActivity {
     private void showAddURLDialog() {
         if (dialogAddUrl == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(NoteActivity.this);
-            View view = LayoutInflater.from(this).inflate(R.layout.layout_add_url, findViewById(R.id.layoutAddUrlContainer));
+            View view = LayoutInflater.from(this).inflate(R.layout.layout_add_url_dialog, findViewById(R.id.layoutAddUrlContainer));
             builder.setView(view);
 
             dialogAddUrl = builder.create();
@@ -401,7 +409,7 @@ public class NoteActivity extends AppCompatActivity {
                 }
             });
 
-            view.findViewById(R.id.textCancel).setOnClickListener(v -> dialogAddUrl.dismiss());
+            view.findViewById(R.id.addUrlCancel).setOnClickListener(v -> dialogAddUrl.dismiss());
         }
         dialogAddUrl.show();
     }

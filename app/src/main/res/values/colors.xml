@@ -29,5 +29,5 @@
     <color name="colorNoteColorRed">#9B2335</color>
     <color name="colorNoteColorBlue">#34568B</color>
     <color name="colorNoteColorBlack">#000000</color>
-    <color name="delete">#FF4842</color>
+    <color name="warning">#FF4842</color>
 </resources>

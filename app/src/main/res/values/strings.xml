@@ -15,5 +15,10 @@
     <string name="add_image">Add image</string>
     <string name="add_url">Add URL</string>
     <string name="add">ADD</string>
-    <string name="cancel">CANCEL</string>
+    <string name="dialog_cancel">CANCEL</string>
+    <string name="delete_dialog_submit">DELETE</string>
+    <string name="delete_note_dialog_title">Delete note</string>
+    <string name="delete_note_dialog_message">Are you sure you want to delete this note?</string>
+    <string name="delete_all_notes_dialog_title">Delete all</string>
+    <string name="delete_all_notes_dialog_message">Are you sure you want to delete all notes?</string>
 </resources>
