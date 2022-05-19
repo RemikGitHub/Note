@@ -5,11 +5,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -34,7 +32,9 @@ import com.example.note.R;
 import com.example.note.database.NoteDatabase;
 import com.example.note.entities.Note;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -78,14 +78,11 @@ public class NoteActivity extends AppCompatActivity {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     try {
                         if (result.getData() != null) {
-                            Uri selectedImageUri = result.getData().getData();
-                            Bitmap bitmap = BitmapFactory.decodeStream(getBaseContext().getContentResolver().openInputStream(selectedImageUri));
-                            imageView.setImageBitmap(bitmap);
+                            this.selectedImagePath = result.getData().getData().getLastPathSegment();
+                            Picasso.get().load(new File(this.selectedImagePath)).into(imageView);
 
                             imageView.setVisibility(View.VISIBLE);
                             findViewById(R.id.imageRemoveImage).setVisibility(View.VISIBLE);
-
-                            selectedImagePath = selectedImageUri.getLastPathSegment();
                         }
                     } catch (Exception exception) {
                         Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show();

@@ -1,7 +1,6 @@
 package com.example.note.adapters;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
@@ -20,7 +19,9 @@ import com.example.note.R;
 import com.example.note.entities.Note;
 import com.example.note.listeners.NoteListener;
 import com.makeramen.roundedimageview.RoundedImageView;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
@@ -106,7 +107,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
             cardLayout.setBackground(res);
 
             if (note.getImagePath() != null && !note.getImagePath().trim().isEmpty()) {
-                imageNote.setImageBitmap(BitmapFactory.decodeFile(note.getImagePath()));
+                Picasso.get().load(new File(note.getImagePath())).resize(800, 0).into(imageNote);
                 imageNote.setVisibility(View.VISIBLE);
             } else {
                 imageNote.setVisibility(View.GONE);
