@@ -88,14 +88,14 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
         recyclerView = findViewById(R.id.recyclerView);
         emptyImage = findViewById(R.id.empty_image);
         emptyText = findViewById(R.id.empty_text);
-
         addButton = findViewById(R.id.add_button);
+        searchInput = findViewById(R.id.searchInput);
+
         addButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, NoteActivity.class);
             noteActivityResultLauncherAddNote.launch(intent);
         });
 
-        searchInput = findViewById(R.id.searchInput);
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

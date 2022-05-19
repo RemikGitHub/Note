@@ -3,11 +3,17 @@ package com.example.note.activities;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -32,12 +38,17 @@ import androidx.core.content.ContextCompat;
 
 import com.example.note.R;
 import com.example.note.database.NoteDatabase;
+import com.example.note.databinding.ActivityNoteBinding;
 import com.example.note.entities.Note;
+import com.example.note.notification.AlarmReceiver;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
@@ -66,6 +77,8 @@ public class NoteActivity extends AppCompatActivity {
     private String selectedNoteColor;
     private String selectedImagePath;
     private String writtenWebUrl;
+
+    private Calendar calendar;
 
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
@@ -99,6 +112,10 @@ public class NoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
+
+        com.example.note.databinding.ActivityNoteBinding binding = ActivityNoteBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        createNotificationChannel();
 
         //toolbar settings
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -365,6 +382,8 @@ public class NoteActivity extends AppCompatActivity {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             showAddURLDialog();
         });
+
+        layoutOptions.findViewById(R.id.layoutAddNotification).setOnClickListener(v -> showDatePicker());
     }
 
     @SuppressLint("QueryPermissionsNeeded")
@@ -407,5 +426,60 @@ public class NoteActivity extends AppCompatActivity {
         view.findViewById(R.id.addUrlCancel).setOnClickListener(v -> dialogAddUrl.dismiss());
 
         dialogAddUrl.show();
+    }
+
+    private void showDatePicker() {
+        calendar = Calendar.getInstance();
+        final DatePickerDialog StartTime = new DatePickerDialog(this, (view, year, monthOfYear, dayOfMonth) -> {
+            calendar.set(year, monthOfYear, dayOfMonth);
+            showTimePicker();
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+
+        StartTime.show();
+    }
+
+    private void showTimePicker() {
+        final MaterialTimePicker timePicker = new MaterialTimePicker.Builder()
+                .setTimeFormat(TimeFormat.CLOCK_24H)
+                .setHour(calendar.get(Calendar.HOUR_OF_DAY))
+                .setMinute(calendar.get(Calendar.MINUTE))
+                .setTitleText("Select notification time")
+                .build();
+
+        timePicker.show(getSupportFragmentManager(), "noteNotification");
+
+        timePicker.addOnPositiveButtonClickListener(v -> {
+            calendar.set(Calendar.HOUR_OF_DAY, timePicker.getHour());
+            calendar.set(Calendar.MINUTE, timePicker.getMinute());
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+
+            setAlarm();
+        });
+    }
+
+    private void setAlarm() {
+        AlarmReceiver.setNotificationTitle(note.getTitle());
+        AlarmReceiver.setNotificationContent(note.getContent());
+
+        Intent intent = new Intent(NoteActivity.this, AlarmReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(NoteActivity.this, 0, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "noteNotificationReminderChannel";
+            String description = "Channel for note notifications";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel("noteNotification", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }
