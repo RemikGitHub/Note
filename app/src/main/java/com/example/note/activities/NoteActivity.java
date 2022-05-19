@@ -25,7 +25,6 @@ import com.example.note.entities.Note;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
@@ -61,7 +60,7 @@ public class NoteActivity extends AppCompatActivity {
         this.noteContentEditText = findViewById(R.id.noteContentEditText);
         this.noteCreationDateTime = findViewById(R.id.textDateTime);
         this.titleIndicator = findViewById(R.id.titleIndicator);
-
+        this.selectedNoteColor = "#444444";
         this.isNewNote = getIntent().getBooleanExtra("isNewNote", true);
 
         setupActivity();
@@ -223,10 +222,10 @@ public class NoteActivity extends AppCompatActivity {
             }
         });
 
-        layoutOptions.findViewById(R.id.viewColorDefault).setOnClickListener(v -> setImageViewsColor("#333333", 0));
+        layoutOptions.findViewById(R.id.viewColorDefault).setOnClickListener(v -> setImageViewsColor("#444444", 0));
         layoutOptions.findViewById(R.id.viewColorYellow).setOnClickListener(v -> setImageViewsColor("#FDBE3B", 1));
-        layoutOptions.findViewById(R.id.viewColorRed).setOnClickListener(v -> setImageViewsColor("#FF4842", 2));
-        layoutOptions.findViewById(R.id.viewColorBlue).setOnClickListener(v -> setImageViewsColor("#3A52FC", 3));
+        layoutOptions.findViewById(R.id.viewColorRed).setOnClickListener(v -> setImageViewsColor("#9B2335", 2));
+        layoutOptions.findViewById(R.id.viewColorBlue).setOnClickListener(v -> setImageViewsColor("#34568B", 3));
         layoutOptions.findViewById(R.id.viewColorBlack).setOnClickListener(v -> setImageViewsColor("#000000", 4));
 
 //        if (alreadyAvailableNote != null) {

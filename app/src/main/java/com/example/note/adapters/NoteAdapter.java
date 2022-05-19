@@ -89,23 +89,22 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
             noteContentText.setText(note.getContent());
             noteCreationDateTimeText.setText(note.getCreationDateTime());
 
-            if (note.getColor() != null) {
-                GradientDrawable gradientDrawable = new GradientDrawable();
-                gradientDrawable.setCornerRadius(25);
-                gradientDrawable.setColor(Color.parseColor(note.getColor()));
 
-                GradientDrawable gradientDrawableClick = new GradientDrawable();
-                gradientDrawableClick.setCornerRadius(25);
-                gradientDrawableClick.setColor(Color.parseColor("#FFFFFF"));
+            GradientDrawable gradientDrawable = new GradientDrawable();
+            gradientDrawable.setCornerRadius(25);
+            gradientDrawable.setColor(Color.parseColor(note.getColor()));
 
-                StateListDrawable res = new StateListDrawable();
-                res.setExitFadeDuration(400);
-                res.setAlpha(45);
+            GradientDrawable gradientDrawableClick = new GradientDrawable();
+            gradientDrawableClick.setCornerRadius(25);
+            gradientDrawableClick.setColor(Color.parseColor("#CCCCCC"));
 
-                res.addState(new int[]{android.R.attr.state_pressed}, gradientDrawableClick);
-                res.addState(new int[]{}, gradientDrawable);
-                cardLayout.setBackground(res);
-            }
+            StateListDrawable res = new StateListDrawable();
+            res.setExitFadeDuration(400);
+
+            res.addState(new int[]{android.R.attr.state_pressed}, gradientDrawableClick);
+            res.addState(new int[]{}, gradientDrawable);
+            cardLayout.setBackground(res);
+
         }
 
     }

@@ -12,7 +12,6 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="cardBackgroundColor">@color/search_background_dark</item>
         <item name="android:colorBackground">@color/background_dark</item>
         <!-- Font. -->
         <item name="android:fontFamily">@font/ubuntu_medium</item>
