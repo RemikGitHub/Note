@@ -147,6 +147,7 @@ public class NoteActivity extends AppCompatActivity {
         newNote.setTitle(noteTitle);
         newNote.setContent(noteText);
         newNote.setCreationDateTime(noteDateTime);
+        newNote.setColor(selectedNoteColor);
 
         if (!isNewNote) {
             newNote.setId(note.getId());
@@ -236,6 +237,50 @@ public class NoteActivity extends AppCompatActivity {
         layoutOptions.findViewById(R.id.viewColorRed).setOnClickListener(v -> setImageViewsColor("#FF4842", 2));
         layoutOptions.findViewById(R.id.viewColorBlue).setOnClickListener(v -> setImageViewsColor("#3A52FC", 3));
         layoutOptions.findViewById(R.id.viewColorBlack).setOnClickListener(v -> setImageViewsColor("#000000", 4));
+
+//        if (alreadyAvailableNote != null) {
+//            final String noteColorCode = alreadyAvailableNote.getColor();
+//            if (noteColorCode != null && !noteColorCode.trim().isEmpty()) {
+//                switch (noteColorCode) {
+//                    case "#FDBE3B":
+//                        layoutOptions.findViewById(R.id.viewColorYellow).performClick();
+//                        break;
+//                    case "#FF4842":
+//                        layoutOptions.findViewById(R.id.viewColorRed).performClick();
+//                        break;
+//                    case "#3A52FC":
+//                        layoutOptions.findViewById(R.id.viewColorBlue).performClick();
+//                        break;
+//                    case "#000000":
+//                        layoutOptions.findViewById(R.id.viewColorBlack).performClick();
+//                        break;
+//                }
+//            }
+//        }
+//
+//        layoutOptions.findViewById(R.id.layoutAddImage).setOnClickListener(v -> {
+//            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+//            if (ContextCompat.checkSelfPermission(getApplicationContext(),
+//                    Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//                ActivityCompat.requestPermissions(CreateNoteActivity.this,
+//                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_STORAGE_PERMISSION);
+//            } else {
+//                selectImage();
+//            }
+//        });
+//
+//        layoutOptions.findViewById(R.id.layoutAddUrl).setOnClickListener(v -> {
+//            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+//            showAddURLDialog();
+//        });
+//
+//        if (alreadyAvailableNote != null) {
+//            layoutOptions.findViewById(R.id.layoutDeleteNote).setVisibility(View.VISIBLE);
+//            layoutOptions.findViewById(R.id.layoutDeleteNote).setOnClickListener(v -> {
+//                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+//                showDeleteNoteDialog();
+//            });
+//        }
     }
 
 }
