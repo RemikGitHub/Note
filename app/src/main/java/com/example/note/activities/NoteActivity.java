@@ -67,9 +67,6 @@ public class NoteActivity extends AppCompatActivity {
     private String selectedImagePath;
     private String writtenWebUrl;
 
-    private AlertDialog dialogAddUrl;
-    private AlertDialog dialogDeleteNote;
-
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) {
@@ -195,41 +192,40 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     private void confirmDeleteDialog() {
-        if (dialogDeleteNote == null) {
-            View dialogLayout = LayoutInflater.from(this).inflate(R.layout.layout_delete_note_dialog, findViewById(R.id.layoutDeleteNoteContainer));
+        View dialogLayout = LayoutInflater.from(this).inflate(R.layout.layout_delete_note_dialog, findViewById(R.id.layoutDeleteNoteContainer));
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setView(dialogLayout);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogLayout);
 
-            this.dialogDeleteNote = builder.create();
+        AlertDialog dialogDeleteNote = builder.create();
 
-            if (this.dialogDeleteNote.getWindow() != null) {
-                this.dialogDeleteNote.getWindow().setBackgroundDrawable(new ColorDrawable(0));
-            }
+        if (dialogDeleteNote.getWindow() != null) {
+            dialogDeleteNote.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
 
-            dialogLayout.findViewById(R.id.textDeleteNote).setOnClickListener(v -> {
+        dialogLayout.findViewById(R.id.textDeleteNote).setOnClickListener(v -> {
 
-                ExecutorService executor = Executors.newSingleThreadExecutor();
-                Handler handler = new Handler(Looper.getMainLooper());
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Handler handler = new Handler(Looper.getMainLooper());
 
-                executor.execute(() -> {
-                    NoteDatabase.getNoteDatabase(getApplicationContext()).noteDao().deleteNote(note);
+            executor.execute(() -> {
+                NoteDatabase.getNoteDatabase(getApplicationContext()).noteDao().deleteNote(note);
 
-                    handler.post(() -> {
-                        this.dialogDeleteNote.dismiss();
+                handler.post(() -> {
+                    dialogDeleteNote.dismiss();
 
-                        Intent intent = new Intent();
-                        if (this.isNewNote) {
-                            setResult(MainActivity.REQUEST_CODE_DELETE_NEW_NOTE, intent);
-                        } else {
-                            setResult(MainActivity.REQUEST_CODE_DELETE_NOTE, intent);
-                        }
-                        finish();
-                    });
+                    Intent intent = new Intent();
+                    if (this.isNewNote) {
+                        setResult(MainActivity.REQUEST_CODE_DELETE_NEW_NOTE, intent);
+                    } else {
+                        setResult(MainActivity.REQUEST_CODE_DELETE_NOTE, intent);
+                    }
+                    finish();
                 });
             });
-            dialogLayout.findViewById(R.id.deleteNoteCancel).setOnClickListener(v -> this.dialogDeleteNote.dismiss());
-        }
+        });
+        dialogLayout.findViewById(R.id.deleteNoteCancel).setOnClickListener(v -> dialogDeleteNote.dismiss());
+
         dialogDeleteNote.show();
     }
 
@@ -380,37 +376,36 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     private void showAddURLDialog() {
-        if (dialogAddUrl == null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(NoteActivity.this);
-            View view = LayoutInflater.from(this).inflate(R.layout.layout_add_url_dialog, findViewById(R.id.layoutAddUrlContainer));
-            builder.setView(view);
+        AlertDialog.Builder builder = new AlertDialog.Builder(NoteActivity.this);
+        View view = LayoutInflater.from(this).inflate(R.layout.layout_add_url_dialog, findViewById(R.id.layoutAddUrlContainer));
+        builder.setView(view);
 
-            dialogAddUrl = builder.create();
-            if (dialogAddUrl.getWindow() != null) {
-                dialogAddUrl.getWindow().setBackgroundDrawable(new ColorDrawable(0));
-            }
-
-            final EditText inputUrl = view.findViewById(R.id.inputURL);
-            inputUrl.requestFocus();
-
-            view.findViewById(R.id.textAdd).setOnClickListener(v -> {
-                final String inputURLStr = inputUrl.getText().toString().trim();
-
-                if (inputURLStr.isEmpty()) {
-                    Toast.makeText(NoteActivity.this, "Enter URL", Toast.LENGTH_SHORT).show();
-                } else if (!Patterns.WEB_URL.matcher(inputURLStr).matches()) {
-                    Toast.makeText(NoteActivity.this, "Enter valid URL", Toast.LENGTH_SHORT).show();
-                } else {
-                    this.writtenWebUrl = inputUrl.getText().toString();
-                    textWebURL.setText(this.writtenWebUrl);
-                    layoutWebURL.setVisibility(View.VISIBLE);
-
-                    dialogAddUrl.dismiss();
-                }
-            });
-
-            view.findViewById(R.id.addUrlCancel).setOnClickListener(v -> dialogAddUrl.dismiss());
+        AlertDialog dialogAddUrl = builder.create();
+        if (dialogAddUrl.getWindow() != null) {
+            dialogAddUrl.getWindow().setBackgroundDrawable(new ColorDrawable(0));
         }
+
+        final EditText inputUrl = view.findViewById(R.id.inputURL);
+        inputUrl.requestFocus();
+
+        view.findViewById(R.id.textAdd).setOnClickListener(v -> {
+            final String inputURLStr = inputUrl.getText().toString().trim();
+
+            if (inputURLStr.isEmpty()) {
+                Toast.makeText(NoteActivity.this, "Enter URL", Toast.LENGTH_SHORT).show();
+            } else if (!Patterns.WEB_URL.matcher(inputURLStr).matches()) {
+                Toast.makeText(NoteActivity.this, "Enter valid URL", Toast.LENGTH_SHORT).show();
+            } else {
+                this.writtenWebUrl = inputUrl.getText().toString();
+                textWebURL.setText(this.writtenWebUrl);
+                layoutWebURL.setVisibility(View.VISIBLE);
+
+                dialogAddUrl.dismiss();
+            }
+        });
+
+        view.findViewById(R.id.addUrlCancel).setOnClickListener(v -> dialogAddUrl.dismiss());
+
         dialogAddUrl.show();
     }
 }
