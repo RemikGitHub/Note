@@ -96,20 +96,6 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
             noteActivityResultLauncherAddNote.launch(intent);
         });
 
-        searchInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                noteAdapter.getFilter().filter(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
         initRecyclerView();
     }
 
@@ -135,6 +121,21 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
 
                 recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
                 recyclerView.setAdapter(noteAdapter);
+
+                searchInput.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        noteAdapter.getFilter().filter(s.toString());
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                    }
+                });
             });
         });
     }
