@@ -28,8 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> implements Filterable {
-    private List<Note> notes;
     public List<Note> notesBackup;
+    private final List<Note> notes;
     private final Context context;
     private final NoteListener noteListener;
     private int absolutePosition;
@@ -82,7 +82,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         return noteFilter;
     }
 
-    private Filter noteFilter = new Filter() {
+    private final Filter noteFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             List<Note> filteredList = new ArrayList<>();
