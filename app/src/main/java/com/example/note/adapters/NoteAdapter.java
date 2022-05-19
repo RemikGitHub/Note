@@ -3,8 +3,10 @@ package com.example.note.adapters;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -98,7 +101,18 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
                 GradientDrawable gradientDrawable =  new GradientDrawable();
                 gradientDrawable.setCornerRadius(25);
                 gradientDrawable.setColor(Color.parseColor(note.getColor()));
-                cardLayout.setBackground(gradientDrawable);
+
+                GradientDrawable gradientDrawableClick =  new GradientDrawable();
+                gradientDrawableClick.setCornerRadius(25);
+                gradientDrawableClick.setColor(Color.parseColor("#FFFFFF"));
+
+                StateListDrawable res = new StateListDrawable();
+                res.setExitFadeDuration(400);
+                res.setAlpha(45);
+
+                res.addState(new int[]{android.R.attr.state_pressed}, gradientDrawableClick);
+                res.addState(new int[]{}, gradientDrawable);
+                cardLayout.setBackground(res);
             }
         }
 
