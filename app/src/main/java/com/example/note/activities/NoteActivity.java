@@ -1,22 +1,32 @@
 package com.example.note.activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.note.R;
 import com.example.note.database.NoteDatabase;
 import com.example.note.entities.Note;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,6 +43,9 @@ public class NoteActivity extends AppCompatActivity {
     private EditText noteTitleEditText;
     private EditText noteContentEditText;
     private TextView noteCreationDateTime;
+    private View titleIndicator;
+
+    private String selectedNoteColor;
 
 
     @Override
@@ -50,10 +63,12 @@ public class NoteActivity extends AppCompatActivity {
         this.noteTitleEditText = findViewById(R.id.noteTitleEditText);
         this.noteContentEditText = findViewById(R.id.noteContentEditText);
         this.noteCreationDateTime = findViewById(R.id.textDateTime);
+        this.titleIndicator = findViewById(R.id.titleIndicator);
 
         this.isNewNote = getIntent().getBooleanExtra("isNewNote", true);
 
         setupActivity();
+        initOptions();
     }
 
     @Override
@@ -157,4 +172,70 @@ public class NoteActivity extends AppCompatActivity {
             });
         });
     }
+
+    private void setTitleIndicatorColor(){
+        GradientDrawable gradientDrawable = (GradientDrawable) titleIndicator.getBackground();
+        gradientDrawable.setColor(Color.parseColor(selectedNoteColor));
+    }
+
+    private void setImageViewsColor(String color, int chosenColor){
+        final LinearLayout layoutOptions = findViewById(R.id.layoutOptions);
+
+        final ImageView imageColorDefault = layoutOptions.findViewById(R.id.imageColorDefault);
+        final ImageView imageColorYellow = layoutOptions.findViewById(R.id.imageColorYellow);
+        final ImageView imageColorRed = layoutOptions.findViewById(R.id.imageColorRed);
+        final ImageView imageColorBlue = layoutOptions.findViewById(R.id.imageColorBlue);
+        final ImageView imageColorBlack = layoutOptions.findViewById(R.id.imageColorBlack);
+
+        selectedNoteColor = color;
+
+        imageColorDefault.setImageResource(0);
+        imageColorYellow.setImageResource(0);
+        imageColorRed.setImageResource(0);
+        imageColorBlue.setImageResource(0);
+        imageColorBlack.setImageResource(0);
+
+        switch (chosenColor) {
+            case 0:{
+                imageColorDefault.setImageResource(R.drawable.ic_done);
+                break;
+            }
+            case 1:{
+                imageColorYellow.setImageResource(R.drawable.ic_done);
+                break;
+            }
+            case 2:{
+                imageColorRed.setImageResource(R.drawable.ic_done);
+                break;
+            }
+            case 3:{
+                imageColorBlue.setImageResource(R.drawable.ic_done);
+                break;
+            }
+            case 4:{
+                imageColorBlack.setImageResource(R.drawable.ic_done);
+                break;
+            }
+        }
+        setTitleIndicatorColor();
+    }
+
+    private void initOptions() {
+        final LinearLayout layoutOptions = findViewById(R.id.layoutOptions);
+        final BottomSheetBehavior<LinearLayout> bottomSheetBehavior = BottomSheetBehavior.from(layoutOptions);
+        layoutOptions.findViewById(R.id.textOptions).setOnClickListener(v -> {
+            if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            } else {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+
+        layoutOptions.findViewById(R.id.viewColorDefault).setOnClickListener(v -> setImageViewsColor("#333333", 0));
+        layoutOptions.findViewById(R.id.viewColorYellow).setOnClickListener(v -> setImageViewsColor("#FDBE3B", 1));
+        layoutOptions.findViewById(R.id.viewColorRed).setOnClickListener(v -> setImageViewsColor("#FF4842", 2));
+        layoutOptions.findViewById(R.id.viewColorBlue).setOnClickListener(v -> setImageViewsColor("#3A52FC", 3));
+        layoutOptions.findViewById(R.id.viewColorBlack).setOnClickListener(v -> setImageViewsColor("#000000", 4));
+    }
+
 }

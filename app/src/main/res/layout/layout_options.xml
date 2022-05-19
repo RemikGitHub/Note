@@ -34,13 +34,13 @@
             android:layout_weight="1">
 
             <View
-                android:id="@+id/viewColor1"
+                android:id="@+id/viewColorDefault"
                 android:layout_width="53dp"
                 android:layout_height="53dp"
-                android:background="@drawable/background_note_color_1" />
+                android:background="@drawable/background_note_color_default" />
 
             <ImageView
-                android:id="@+id/imageColor1"
+                android:id="@+id/imageColorDefault"
                 android:layout_width="53dp"
                 android:layout_height="53dp"
                 android:contentDescription="@string/app_name"
@@ -54,13 +54,13 @@
             android:layout_weight="1">
 
             <View
-                android:id="@+id/viewColor2"
+                android:id="@+id/viewColorYellow"
                 android:layout_width="53dp"
                 android:layout_height="53dp"
-                android:background="@drawable/background_note_color_2" />
+                android:background="@drawable/background_note_color_yellow" />
 
             <ImageView
-                android:id="@+id/imageColor2"
+                android:id="@+id/imageColorYellow"
                 android:layout_width="53dp"
                 android:layout_height="53dp"
                 android:contentDescription="@string/app_name"
@@ -73,13 +73,13 @@
             android:layout_weight="1">
 
             <View
-                android:id="@+id/viewColor3"
+                android:id="@+id/viewColorRed"
                 android:layout_width="53dp"
                 android:layout_height="53dp"
-                android:background="@drawable/background_note_color_3" />
+                android:background="@drawable/background_note_color_red" />
 
             <ImageView
-                android:id="@+id/imageColor3"
+                android:id="@+id/imageColorRed"
                 android:layout_width="53dp"
                 android:layout_height="53dp"
                 android:contentDescription="@string/app_name"
@@ -92,13 +92,13 @@
             android:layout_weight="1">
 
             <View
-                android:id="@+id/viewColor4"
+                android:id="@+id/viewColorBlue"
                 android:layout_width="53dp"
                 android:layout_height="53dp"
-                android:background="@drawable/background_note_color_4" />
+                android:background="@drawable/background_note_color_blue" />
 
             <ImageView
-                android:id="@+id/imageColor4"
+                android:id="@+id/imageColorBlue"
                 android:layout_width="53dp"
                 android:layout_height="53dp"
                 android:contentDescription="@string/app_name"
@@ -111,13 +111,13 @@
             android:layout_weight="1">
 
             <View
-                android:id="@+id/viewColor5"
+                android:id="@+id/viewColorBlack"
                 android:layout_width="53dp"
                 android:layout_height="53dp"
-                android:background="@drawable/background_note_color_5" />
+                android:background="@drawable/background_note_color_black" />
 
             <ImageView
-                android:id="@+id/imageColor5"
+                android:id="@+id/imageColorBlack"
                 android:layout_width="53dp"
                 android:layout_height="53dp"
                 android:contentDescription="@string/app_name"

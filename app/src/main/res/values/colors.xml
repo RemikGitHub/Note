@@ -26,9 +26,9 @@
     <color name="card_click_light">#FFFFFF</color>
     <color name="card_click_dark">#444444</color>
 
-    <color name="colorNoteColor2">#FDBE3B</color>
-    <color name="colorNoteColor3">#FF4842</color>
-    <color name="colorNoteColor4">#3A52FC</color>
-    <color name="colorNoteColor5">#000000</color>
+    <color name="colorNoteColorYellow">#FDBE3B</color>
+    <color name="colorNoteColorRed">#FF4842</color>
+    <color name="colorNoteColorBlue">#3A52FC</color>
+    <color name="colorNoteColorBlack">#000000</color>
     <color name="delete">#FF4842</color>
 </resources>
