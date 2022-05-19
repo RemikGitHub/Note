@@ -32,6 +32,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
     public List<Note> notesBackup;
     private final Context context;
     private final NoteListener noteListener;
+    private int absolutePosition;
 
     public NoteAdapter(Context context, List<Note> notes, NoteListener noteListener) {
         this.context = context;
@@ -52,9 +53,14 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
         holder.setNoteCard(notes.get(position));
-        holder.cardLayout.setOnClickListener(v ->
-                noteListener.onNoteClicked(notes.get(position), position));
+
+        holder.cardLayout.setOnClickListener(v -> {
+            absolutePosition = notesBackup.indexOf(notes.get(position));
+            noteListener.onNoteClicked(notes.get(position), position);
+        });
+
         holder.cardLayout.setOnLongClickListener(v -> {
+            absolutePosition = notesBackup.indexOf(notes.get(position));
             noteListener.onNoteLongClicked(notes.get(position), position, v);
             return true;
         });
@@ -102,21 +108,22 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         protected void publishResults(CharSequence constraint, FilterResults results) {
             notifyItemRangeChanged(0, notes.size());
             notes.clear();
-            notes.addAll((List<Note>)results.values);
+            notes.addAll((List<Note>) results.values);
             notifyItemRangeChanged(0, notes.size());
         }
     };
 
     public void deleteNote(int position) {
-        notesBackup.remove(notes.get(position));
+        notesBackup.remove(absolutePosition);
         notes.remove(position);
 
         notifyItemRemoved(position);
     }
 
-    public void updateNote(int position, Note note) {
-        notesBackup.set(notesBackup.indexOf(notes.get(position)), note);
-        notes.set(position, note);
+    public void updateNote(int position, List<Note> notesFromDb) {
+        Note changedNote = notesFromDb.get(absolutePosition);
+        notesBackup.set(absolutePosition, changedNote);
+        notes.set(position, changedNote);
 
         notifyItemChanged(position);
     }
@@ -127,7 +134,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         notifyItemInserted(position);
     }
 
-    public boolean thereAreNoNotes(){
+    public boolean thereAreNoNotes() {
         return notesBackup.isEmpty();
     }
 

@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
                     noteAdapter.addNote(0, notesFromDb.get(0));
                     recyclerView.smoothScrollToPosition(0);
                 } else if (requestCode == REQUEST_CODE_UPDATE_NOTE) {
-                    noteAdapter.updateNote(noteChosenPosition, notesFromDb.get(noteChosenPosition));
+                    noteAdapter.updateNote(noteChosenPosition, notesFromDb);
                 } else if (requestCode == REQUEST_CODE_DELETE_NOTE) {
                     noteAdapter.deleteNote(noteChosenPosition);
                     if (noteAdapter.thereAreNoNotes()) {
