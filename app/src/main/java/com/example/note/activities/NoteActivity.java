@@ -33,6 +33,12 @@ import java.util.concurrent.Executors;
 
 public class NoteActivity extends AppCompatActivity {
 
+    private static final String COLOR_DEFAULT = "#444444";
+    private static final String COLOR_YELLOW = "#FDBE3B";
+    private static final String COLOR_RED = "#9B2335";
+    private static final String COLOR_BLUE = "#34568B";
+    private static final String COLOR_BLACK = "#000000";
+
     private boolean isNewNote;
     private Note note;
 
@@ -60,7 +66,6 @@ public class NoteActivity extends AppCompatActivity {
         this.noteContentEditText = findViewById(R.id.noteContentEditText);
         this.noteCreationDateTime = findViewById(R.id.textDateTime);
         this.titleIndicator = findViewById(R.id.titleIndicator);
-        this.selectedNoteColor = "#444444";
         this.isNewNote = getIntent().getBooleanExtra("isNewNote", true);
 
         setupActivity();
@@ -94,16 +99,17 @@ public class NoteActivity extends AppCompatActivity {
 
     private void setupActivity() {
         if (!this.isNewNote) {
-            this.note = (Note) getIntent().getSerializableExtra("note");
 
-            noteTitleEditText.setText(note.getTitle());
-            noteContentEditText.setText(note.getContent());
-            noteCreationDateTime.setText(note.getCreationDateTime());
+            this.note = (Note) getIntent().getSerializableExtra("note");
+            this.noteTitleEditText.setText(note.getTitle());
+            this.noteContentEditText.setText(note.getContent());
+            this.noteCreationDateTime.setText(note.getCreationDateTime());
+            this.selectedNoteColor = note.getColor();
 
         } else {
             this.note = new Note();
-
-            noteCreationDateTime.setText(new SimpleDateFormat(
+            this.selectedNoteColor = COLOR_DEFAULT;
+            this.noteCreationDateTime.setText(new SimpleDateFormat(
                     "HH:mm - EEEE, dd MMMM yyyy", Locale.getDefault()).format(new Date().getTime())
             );
         }
@@ -165,11 +171,12 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     private void setTitleIndicatorColor() {
-        GradientDrawable gradientDrawable = (GradientDrawable) titleIndicator.getBackground();
-        gradientDrawable.setColor(Color.parseColor(selectedNoteColor));
+        GradientDrawable gradientDrawable = (GradientDrawable) this.titleIndicator.getBackground();
+        gradientDrawable.setColor(Color.parseColor(this.selectedNoteColor));
     }
 
     private void setImageViewsColor(String color, int chosenColor) {
+        this.selectedNoteColor = color;
         final LinearLayout layoutOptions = findViewById(R.id.layoutOptions);
 
         final ImageView imageColorDefault = layoutOptions.findViewById(R.id.imageColorDefault);
@@ -177,8 +184,6 @@ public class NoteActivity extends AppCompatActivity {
         final ImageView imageColorRed = layoutOptions.findViewById(R.id.imageColorRed);
         final ImageView imageColorBlue = layoutOptions.findViewById(R.id.imageColorBlue);
         final ImageView imageColorBlack = layoutOptions.findViewById(R.id.imageColorBlack);
-
-        selectedNoteColor = color;
 
         imageColorDefault.setImageResource(0);
         imageColorYellow.setImageResource(0);
@@ -214,6 +219,13 @@ public class NoteActivity extends AppCompatActivity {
     private void initOptions() {
         final LinearLayout layoutOptions = findViewById(R.id.layoutOptions);
         final BottomSheetBehavior<LinearLayout> bottomSheetBehavior = BottomSheetBehavior.from(layoutOptions);
+
+        final View viewColorDefault = layoutOptions.findViewById(R.id.viewColorDefault);
+        final View viewColorYellow = layoutOptions.findViewById(R.id.viewColorYellow);
+        final View viewColorRed = layoutOptions.findViewById(R.id.viewColorRed);
+        final View viewColorBlue = layoutOptions.findViewById(R.id.viewColorBlue);
+        final View viewColorBlack = layoutOptions.findViewById(R.id.viewColorBlack);
+
         layoutOptions.findViewById(R.id.textOptions).setOnClickListener(v -> {
             if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -222,31 +234,31 @@ public class NoteActivity extends AppCompatActivity {
             }
         });
 
-        layoutOptions.findViewById(R.id.viewColorDefault).setOnClickListener(v -> setImageViewsColor("#444444", 0));
-        layoutOptions.findViewById(R.id.viewColorYellow).setOnClickListener(v -> setImageViewsColor("#FDBE3B", 1));
-        layoutOptions.findViewById(R.id.viewColorRed).setOnClickListener(v -> setImageViewsColor("#9B2335", 2));
-        layoutOptions.findViewById(R.id.viewColorBlue).setOnClickListener(v -> setImageViewsColor("#34568B", 3));
-        layoutOptions.findViewById(R.id.viewColorBlack).setOnClickListener(v -> setImageViewsColor("#000000", 4));
+        viewColorDefault.setOnClickListener(v -> setImageViewsColor(COLOR_DEFAULT, 0));
+        viewColorYellow.setOnClickListener(v -> setImageViewsColor(COLOR_YELLOW, 1));
+        viewColorRed.setOnClickListener(v -> setImageViewsColor(COLOR_RED, 2));
+        viewColorBlue.setOnClickListener(v -> setImageViewsColor(COLOR_BLUE, 3));
+        viewColorBlack.setOnClickListener(v -> setImageViewsColor(COLOR_BLACK, 4));
 
-//        if (alreadyAvailableNote != null) {
-//            final String noteColorCode = alreadyAvailableNote.getColor();
-//            if (noteColorCode != null && !noteColorCode.trim().isEmpty()) {
-//                switch (noteColorCode) {
-//                    case "#FDBE3B":
-//                        layoutOptions.findViewById(R.id.viewColorYellow).performClick();
-//                        break;
-//                    case "#FF4842":
-//                        layoutOptions.findViewById(R.id.viewColorRed).performClick();
-//                        break;
-//                    case "#3A52FC":
-//                        layoutOptions.findViewById(R.id.viewColorBlue).performClick();
-//                        break;
-//                    case "#000000":
-//                        layoutOptions.findViewById(R.id.viewColorBlack).performClick();
-//                        break;
-//                }
-//            }
-//        }
+        switch (this.selectedNoteColor) {
+            case COLOR_DEFAULT:
+                viewColorDefault.performClick();
+                break;
+            case COLOR_YELLOW:
+                viewColorYellow.performClick();
+                break;
+            case COLOR_RED:
+                viewColorRed.performClick();
+                break;
+            case COLOR_BLUE:
+                viewColorBlue.performClick();
+                break;
+            case COLOR_BLACK:
+                viewColorBlack.performClick();
+                break;
+        }
+
+    }
 //
 //        layoutOptions.findViewById(R.id.layoutAddImage).setOnClickListener(v -> {
 //            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -271,6 +283,4 @@ public class NoteActivity extends AppCompatActivity {
 //                showDeleteNoteDialog();
 //            });
 //        }
-    }
-
 }
