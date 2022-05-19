@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Note"
         android:requestLegacyExternalStorage="true">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3551648437653606~2898940557"/>
         <activity
             android:name=".activities.NoteActivity"
             android:parentActivityName=".activities.MainActivity"

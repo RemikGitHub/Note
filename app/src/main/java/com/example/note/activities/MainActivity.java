@@ -32,6 +32,9 @@ import com.example.note.adapters.NoteAdapter;
 import com.example.note.database.NoteDatabase;
 import com.example.note.entities.Note;
 import com.example.note.listeners.NoteListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -81,6 +84,13 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MobileAds.initialize(this, initializationStatus -> {
+        });
+
+        AdView adView = findViewById(R.id.ad_view);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
