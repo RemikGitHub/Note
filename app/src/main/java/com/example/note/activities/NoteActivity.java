@@ -192,11 +192,10 @@ public class NoteActivity extends AppCompatActivity {
 
                     if (this.isNewNote) {
                         setResult(MainActivity.REQUEST_CODE_DELETE_NEW_NOTE, intent);
-                        finish();
                     } else {
                         setResult(MainActivity.REQUEST_CODE_DELETE_NOTE, intent);
-                        finish();
                     }
+                    finish();
                 });
             });
         });
