@@ -14,4 +14,6 @@
     <string name="select_color">Color</string>
     <string name="add_image">Add image</string>
     <string name="add_url">Add URL</string>
+    <string name="add">ADD</string>
+    <string name="cancel">CANCEL</string>
 </resources>

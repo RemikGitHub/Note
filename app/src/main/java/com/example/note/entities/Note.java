@@ -31,6 +31,9 @@ public class Note implements Serializable {
     @ColumnInfo(name = "imagePath")
     private String imagePath;
 
+    @ColumnInfo(name = "webLink")
+    private String webLink;
+
     @NonNull
     @Override
     public String toString() {
@@ -91,5 +94,13 @@ public class Note implements Serializable {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public String getWebLink() {
+        return webLink;
+    }
+
+    public void setWebLink(String webLink) {
+        this.webLink = webLink;
     }
 }

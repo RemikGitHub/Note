@@ -17,6 +17,7 @@
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.18541666666666667" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/background_card.xml" value="0.2712962962962963" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/background_delete.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/background_dialog.xml" value="0.18541666666666667" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/background_note_color_1.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/background_note_color_2.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/drawable/background_note_color_3.xml" value="0.18802083333333333" />
@@ -50,6 +51,7 @@
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/layout/activity_note.xml" value="0.264" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/layout/custom_card.xml" value="0.1337386018237082" />
+        <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/layout/layout_add_url.xml" value="0.16927083333333334" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/layout/layout_miscellaneous.xml" value="0.171875" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/layout/layout_options.xml" value="0.16927083333333334" />
         <entry key="..\:/Users/remik/Documents/GitHub/AndroidProjekt/Note/app/src/main/res/layout/row.xml" value="0.1" />

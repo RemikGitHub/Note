@@ -5,13 +5,15 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
+import android.util.Patterns;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -58,9 +60,16 @@ public class NoteActivity extends AppCompatActivity {
     private TextView noteCreationDateTime;
     private View titleIndicator;
     private ImageView imageView;
+    private TextView textWebURL;
+    private LinearLayout layoutWebURL;
 
     private String selectedNoteColor;
     private String selectedImagePath;
+    private String writtenWebUrl;
+
+
+    private AlertDialog dialogAddUrl;
+    private AlertDialog dialogDeleteNote;
 
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
@@ -107,6 +116,8 @@ public class NoteActivity extends AppCompatActivity {
         this.noteCreationDateTime = findViewById(R.id.textDateTime);
         this.titleIndicator = findViewById(R.id.titleIndicator);
         this.imageView = findViewById(R.id.imageNote);
+        this.textWebURL = findViewById(R.id.textWebURL);
+        this.layoutWebURL = findViewById(R.id.layoutWebURL);
         this.isNewNote = getIntent().getBooleanExtra("isNewNote", true);
 
         findViewById(R.id.imageRemoveImage).setOnClickListener(v -> {
@@ -114,6 +125,12 @@ public class NoteActivity extends AppCompatActivity {
             imageView.setVisibility(View.GONE);
             findViewById(R.id.imageRemoveImage).setVisibility(View.GONE);
             selectedImagePath = "";
+        });
+
+        findViewById(R.id.imageRemoveWebURL).setOnClickListener(v -> {
+            textWebURL.setText(null);
+            layoutWebURL.setVisibility(View.GONE);
+            this.writtenWebUrl = "";
         });
 
         setupActivity();
@@ -154,17 +171,24 @@ public class NoteActivity extends AppCompatActivity {
             this.noteCreationDateTime.setText(note.getCreationDateTime());
             this.selectedNoteColor = note.getColor();
             this.selectedImagePath = note.getImagePath();
+            this.writtenWebUrl = note.getWebLink();
 
             if (this.selectedImagePath != null && !this.selectedImagePath.trim().isEmpty()) {
-                imageView.setImageBitmap(BitmapFactory.decodeFile(this.selectedImagePath));
+                Picasso.get().load(new File(this.selectedImagePath)).into(imageView);
                 imageView.setVisibility(View.VISIBLE);
                 findViewById(R.id.imageRemoveImage).setVisibility(View.VISIBLE);
+            }
+
+            if (this.writtenWebUrl != null && !this.writtenWebUrl.trim().isEmpty()) {
+                textWebURL.setText(this.writtenWebUrl);
+                layoutWebURL.setVisibility(View.VISIBLE);
             }
 
         } else {
             this.note = new Note();
             this.selectedNoteColor = COLOR_DEFAULT;
             this.selectedImagePath = "";
+            this.writtenWebUrl = "";
             this.noteCreationDateTime.setText(new SimpleDateFormat(
                     "HH:mm - EEEE, dd MMMM yyyy", Locale.getDefault()).format(new Date().getTime())
             );
@@ -211,6 +235,7 @@ public class NoteActivity extends AppCompatActivity {
         this.note.setCreationDateTime(noteDateTime);
         this.note.setColor(this.selectedNoteColor);
         this.note.setImagePath(this.selectedImagePath);
+        this.note.setWebLink(this.writtenWebUrl);
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
@@ -331,6 +356,11 @@ public class NoteActivity extends AppCompatActivity {
             }
 
         });
+
+        layoutOptions.findViewById(R.id.layoutAddUrl).setOnClickListener(v -> {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            showAddURLDialog();
+        });
     }
 
     @SuppressLint("QueryPermissionsNeeded")
@@ -339,5 +369,40 @@ public class NoteActivity extends AppCompatActivity {
         if (intent.resolveActivity(getPackageManager()) != null) {
             this.activityResultLauncherImageActivity.launch(intent);
         }
+    }
+
+    private void showAddURLDialog() {
+        if (dialogAddUrl == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(NoteActivity.this);
+            View view = LayoutInflater.from(this).inflate(R.layout.layout_add_url, findViewById(R.id.layoutAddUrlContainer));
+            builder.setView(view);
+
+            dialogAddUrl = builder.create();
+            if (dialogAddUrl.getWindow() != null) {
+                dialogAddUrl.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+            }
+
+            final EditText inputUrl = view.findViewById(R.id.inputURL);
+            inputUrl.requestFocus();
+
+            view.findViewById(R.id.textAdd).setOnClickListener(v -> {
+                final String inputURLStr = inputUrl.getText().toString().trim();
+
+                if (inputURLStr.isEmpty()) {
+                    Toast.makeText(NoteActivity.this, "Enter URL", Toast.LENGTH_SHORT).show();
+                } else if (!Patterns.WEB_URL.matcher(inputURLStr).matches()) {
+                    Toast.makeText(NoteActivity.this, "Enter valid URL", Toast.LENGTH_SHORT).show();
+                } else {
+                    this.writtenWebUrl = inputUrl.getText().toString();
+                    textWebURL.setText(this.writtenWebUrl);
+                    layoutWebURL.setVisibility(View.VISIBLE);
+
+                    dialogAddUrl.dismiss();
+                }
+            });
+
+            view.findViewById(R.id.textCancel).setOnClickListener(v -> dialogAddUrl.dismiss());
+        }
+        dialogAddUrl.show();
     }
 }
